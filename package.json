@@ -1,6 +1,6 @@
 {
   "name": "@fluritheme/spider",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A tiny, expressive spider for your website. Delicate webs that follow DOM layers, blinking eyes, and playful pointer reactions.",
   "type": "module",
   "license": "MIT",

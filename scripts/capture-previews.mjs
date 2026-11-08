@@ -24,7 +24,7 @@ try {
       '-i',
       await video.path(),
       '-vf',
-      'fps=12,scale=900:-1:flags=lanczos,split[s0][s1];[s0]palettegen=max_colors=160[p];[s1][p]paletteuse=dither=bayer:bayer_scale=4',
+      'fps=10,scale=800:-1:flags=lanczos,split[s0][s1];[s0]palettegen=max_colors=128[p];[s1][p]paletteuse=dither=bayer:bayer_scale=4',
       '-loop',
       '0',
       new URL('spider.gif', output).pathname,
@@ -72,17 +72,17 @@ try {
     canvas.height = 440;
     document.body.append(canvas);
     const ctx = canvas.getContext('2d');
-    ctx.fillStyle = '#1719df';
+    ctx.fillStyle = '#b94323';
     ctx.fillRect(0, 0, 600, 440);
-    ctx.fillStyle = '#111210';
+    ctx.fillStyle = '#15110f';
     ctx.fillRect(600, 0, 600, 440);
     for (const x of [300, 900])
       window.paintSpider(ctx, { x, y: 206 }, null, '#6c5140', 4, 1, null, 0, true);
     ctx.font = '11px DM,Arial';
     ctx.textAlign = 'center';
-    ctx.fillStyle = '#f2f2e9';
+    ctx.fillStyle = '#f4e6d3';
     ctx.fillText('ONE LITTLE RESIDENT.', 300, 373);
-    ctx.fillStyle = '#d8ff54';
+    ctx.fillStyle = '#ffca7a';
     ctx.fillText('THE SAME PALETTE. EVERYWHERE.', 900, 373);
   });
   await page.screenshot({ path: new URL('character.png', output).pathname });

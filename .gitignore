@@ -14,3 +14,5 @@ test-results/
 preview-recordings/
 
 .spider-node-modules-evicted/
+
+!assets/social/github-preview.png

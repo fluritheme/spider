@@ -1,8 +1,15 @@
 # Changelog
 
+## 0.1.2 — 2026-11-08
+
+- Apply burnt-pumpkin, charcoal, ivory, and amber styling across the website and preview assets.
+- Redesign the README with a branded header, live weaving capture, and focused desktop, phone, and character previews.
+- Add an original 1280 × 640 GitHub social card and a reproducible renderer.
+- Make the shelter regression test use controlled animation time, avoiding hosted-WebKit frame throttling.
+
 ## 0.1.1 — 2026-11-08
 
-- Rebuild the website as a cobalt live habitat with oversized typography, dark controls, and improved runtime previews.
+- Rebuild the website as a Halloween live habitat with oversized typography, dark controls, and improved runtime previews.
 - Sample actual font ink contours and affine object edges for silk attachments.
 - Weave layered hanging sheets with catenary-profile strands and staggered cross-ties.
 

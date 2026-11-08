@@ -2,46 +2,53 @@
 
 # Spider by Fluri
 
-**A little life for your website.**
+**A tiny spider. A little mischief. Your website is his now.**
 
-A tiny jumping spider that explores your page, spins delicate silk, blinks, startles at your cursor, and slips behind real objects.
+[Live habitat](https://spider.fluri.xyz/) · [npm](https://www.npmjs.com/package/@fluritheme/spider) · [Options](#options) · [Source](https://github.com/fluritheme/spider)
 
-[Live playground](https://spider.fluri.xyz/) · [npm](https://www.npmjs.com/package/@fluritheme/spider) · [API](#options) · [Contributing](https://github.com/fluritheme/spider/blob/main/CONTRIBUTING.md)
-
-[![npm version](https://img.shields.io/npm/v/@fluritheme/spider.svg?color=bd4b29)](https://www.npmjs.com/package/@fluritheme/spider)
-[![MIT license](https://img.shields.io/badge/license-MIT-74716d.svg)](https://github.com/fluritheme/spider/blob/main/LICENSE)
+[![npm version](https://img.shields.io/npm/v/@fluritheme/spider.svg?color=b94323)](https://www.npmjs.com/package/@fluritheme/spider)
+[![MIT license](https://img.shields.io/badge/license-MIT-39271d.svg)](https://github.com/fluritheme/spider/blob/main/LICENSE)
 [![Quality](https://github.com/fluritheme/spider/actions/workflows/ci.yml/badge.svg)](https://github.com/fluritheme/spider/actions/workflows/ci.yml)
 
 </div>
 
-![The real Spider package exploring, weaving, and hiding in the live demo](https://raw.githubusercontent.com/fluritheme/spider/main/assets/readme/spider.gif)
+![Spider by Fluri in burnt pumpkin, ivory, and charcoal: a little life for your website](https://raw.githubusercontent.com/fluritheme/spider/main/assets/social/github-preview.png)
 
-## Meet your smallest resident
+A small, expressive jumping spider that descends on silk, weaves between actual letters and objects, explores your page, and slips behind things when you get too close. Original vector artwork. Zero runtime dependencies.
 
-- **A whole document to explore.** It walks beyond its web, rests, weaves, and takes shelter behind cards and other objects. Scrolling moves the spider and its silk with the document.
-- **A carefully drawn jumping spider.** Eight articulated legs, alternating footfalls, fine fuzz, sand-colored markings, glossy eyes, and a quiet blink. Its palette stays stable as it crosses light and dark content; a fine outline provides contrast.
-- **Silk it actually makes.** The spider descends on a thread, attaches to real letter and object edges, traverses support cables, then stitches curved cross-threads. Roaming mode never spawns a complete net. Finished sections stay until cleared or the bounded history fills.
-- **Aware of layers.** Web anchors follow DOM geometry; hiding uses rounded object silhouettes, including ordinary nested 2D transforms. The optional hanging mode also clips corner-web visibility using browser hit-testing.
-- **A good guest.** Zero runtime dependencies, no CSS imports, no network requests, no telemetry, and no changes to your elements' styles or markup.
-- **Ready for real websites.** Touch reactions, responsive webs, reduced-motion support, high-DPI rendering with a bounded backing store, SSR-safe imports, and complete cleanup.
+## Watch him make himself at home
 
-### Previews
+[![Thirty seconds of the real package descending and physically weaving silk in the Halloween habitat](https://raw.githubusercontent.com/fluritheme/spider/main/assets/readme/spider.gif)](https://spider.fluri.xyz/)
 
-**Silk woven around actual page lettering.**
+The actual package, captured live. Every strand is laid by the spider. Finished silk stays on the document when you scroll, click, or drag. [Meet the resident →](https://spider.fluri.xyz/)
 
-![Spider weaving around the live page heading](https://raw.githubusercontent.com/fluritheme/spider/main/assets/readme/woven-page.png)
+## Small creature. Real presence.
 
-**The live habitat — actual silk woven across oversized lettering.**
+- **He builds.** Font-contour and object-edge anchors, loose support cables, hanging cross-threads, and staggered little ties. No pre-spawned roaming nets.
+- **He notices.** Glossy blinking eyes, eight articulated striped legs, a steady sable palette, and pointer/touch reactions.
+- **He knows his way.** Page-anchored exploration, pauses, hiding behind actual objects, and a dragline that stays connected.
+- **He’s a good guest.** No CSS import, remote sprites, tracking, storage, or network calls. Passive touch listeners, reduced-motion support, SSR-safe imports, and complete cleanup.
 
-![Spider exploring a cobalt habitat with silk between the actual letters](https://raw.githubusercontent.com/fluritheme/spider/main/assets/readme/playground.png)
+## The fine threads
 
-**A closer look — the original procedural jumping-spider design.**
+![A close view of actual silk woven across the live habitat's letters](https://raw.githubusercontent.com/fluritheme/spider/main/assets/readme/woven-page.png)
 
-![Original jumping spider with a stable palette on cobalt and charcoal surfaces](https://raw.githubusercontent.com/fluritheme/spider/main/assets/readme/character.png)
+<details>
+<summary>Explore the desktop, mobile, and character previews</summary>
 
-**Small screens, thoughtfully handled.**
+**The full live habitat.**
 
-<img src="https://raw.githubusercontent.com/fluritheme/spider/main/assets/readme/mobile.png" alt="Spider's responsive playground on a phone" width="390" />
+![The Halloween habitat in burnt pumpkin and warm ivory](https://raw.githubusercontent.com/fluritheme/spider/main/assets/readme/playground.png)
+
+**One original character. The same palette on every surface.**
+
+![The original procedural jumping spider on pumpkin and charcoal backgrounds](https://raw.githubusercontent.com/fluritheme/spider/main/assets/readme/character.png)
+
+**A little mischief on a small screen.**
+
+<img src="https://raw.githubusercontent.com/fluritheme/spider/main/assets/readme/mobile.png" alt="The responsive Halloween habitat on a phone" width="390" />
+
+</details>
 
 ## Install
 
@@ -73,7 +80,7 @@ No required stylesheet, wrapper, asset download, or framework adapter. The packa
 ```html
 <article data-spider-web="top-left">Hello, little friend.</article>
 <script type="module">
-  import { createSpider } from 'https://cdn.jsdelivr.net/npm/@fluritheme/spider@0.1.1/dist/index.js';
+  import { createSpider } from 'https://cdn.jsdelivr.net/npm/@fluritheme/spider@0.1.2/dist/index.js';
   const spider = createSpider();
 </script>
 ```

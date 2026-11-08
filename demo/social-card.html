@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+  <meta charset="utf-8" /><meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+  /><title>Spider — GitHub social card</title
+  ><style>
+    @font-face {
+      font-family: DM;
+      src: url('/fonts/dm-sans-latin.woff2');
+      font-weight: 400 700;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    html,
+    body {
+      margin: 0;
+      width: 1280px;
+      height: 640px;
+      overflow: hidden;
+      background: #b94323;
+      color: #fff0db;
+      font-family: DM, Arial;
+    }
+    header {
+      position: absolute;
+      left: 64px;
+      right: 64px;
+      top: 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      letter-spacing: 2px;
+    }
+    header span:first-child {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    i {
+      width: 7px;
+      height: 7px;
+      background: #ffca7a;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    header span:last-child {
+      letter-spacing: 0;
+      font-size: 15px;
+    }
+    h1 {
+      position: absolute;
+      left: 58px;
+      top: 125px;
+      font-size: 235px;
+      font-weight: 500;
+      line-height: 1;
+      letter-spacing: -21px;
+      margin: 0;
+    }
+    .tagline {
+      position: absolute;
+      left: 69px;
+      top: 408px;
+      font-size: 43px;
+      font-weight: 450;
+      line-height: 1.08;
+      letter-spacing: -1.8px;
+    }
+    .tagline span {
+      color: #ffca7a;
+    }
+    .package {
+      position: absolute;
+      left: 70px;
+      bottom: 44px;
+      font:
+        13px ui-monospace,
+        SFMono-Regular,
+        Consolas,
+        monospace;
+      color: #fff0db;
+      letter-spacing: 0.1px;
+    }
+    .package span {
+      color: #eeb89b;
+      margin-right: 13px;
+    }
+    .qualities {
+      position: absolute;
+      right: 62px;
+      bottom: 48px;
+      text-align: right;
+      font:
+        10px ui-monospace,
+        SFMono-Regular,
+        Consolas,
+        monospace;
+      letter-spacing: 1px;
+      color: #f4c5a2;
+      line-height: 2.2;
+    }
+    canvas {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+  </style>
+  <header>
+    <span><i></i>A SMALL WEB RESIDENT.</span><span>by <b>Fluri ↗</b></span>
+  </header>
+  <h1>spider.</h1>
+  <div class="tagline">A little life.<br /><span>For your website.</span></div>
+  <div class="package"><span>$</span>npm i @fluritheme/spider</div>
+  <div class="qualities">DESCENDS. WEAVES. EXPLORES.<br />ZERO DEPENDENCIES / MIT LICENSE</div>
+  <canvas id="art" width="1280" height="640"></canvas>
+  <script type="module">
+    import { paintSpider } from '../src/paint.ts';
+    import { paintThreads, curvePoint } from '../src/resident.ts';
+    await document.fonts.ready;
+    const canvas = document.querySelector('#art'),
+      ctx = canvas.getContext('2d');
+    const a = { x: 706, y: 222 },
+      b = { x: 1094, y: 135 },
+      c = { x: 1130, y: 390 },
+      d = { x: 718, y: 370 };
+    const threads = [
+      { from: a, to: b, sag: 67 },
+      { from: b, to: c, sag: 13 },
+      { from: c, to: d, sag: 43 },
+      { from: d, to: a, sag: 9 },
+    ];
+    const rows = [];
+    for (let i = 1; i <= 13; i++) {
+      const t = i / 14,
+        left = curvePoint(a, d, 9, t),
+        right = curvePoint(b, c, 13, t + Math.sin(i * 1.8) * 0.018),
+        sag = 67 * (1 - t) + 43 * t + Math.sin(i * 2.1) * 6;
+      threads.push({ from: left, to: right, sag });
+      rows.push({ from: left, to: right, sag });
+    }
+    for (let i = 1; i < rows.length; i += 2) {
+      const first = rows[i - 1],
+        second = rows[i];
+      for (const fraction of [0.19, 0.47, 0.78])
+        threads.push({
+          from: curvePoint(first.from, first.to, first.sag, fraction),
+          to: curvePoint(second.from, second.to, second.sag, fraction + Math.sin(i * 1.2) * 0.035),
+          sag: 3,
+        });
+    }
+    paintThreads(
+      ctx,
+      threads.map((t) => ({ ...t, laid: 1, born: 0, group: 1, ink: '#ffe7c5' })),
+      0.73,
+    );
+    ctx.strokeStyle = '#ffe9cc';
+    ctx.lineWidth = 0.8;
+    ctx.globalAlpha = 0.5;
+    ctx.beginPath();
+    ctx.moveTo(1090, 0);
+    ctx.quadraticCurveTo(1080, 82, 1094, 135);
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+    paintSpider(
+      ctx,
+      { x: 1015, y: 294 },
+      null,
+      '#6c5140',
+      3.8,
+      2,
+      null,
+      0,
+      true,
+      -0.35,
+      1.2,
+      false,
+    );
+    window.cardReady = true;
+  </script>
+</html>

@@ -163,17 +163,19 @@ test('marketing page controls, code tabs, and responsive layout work', async ({ 
   );
   await page.getByRole('button', { name: 'Clear silk', exact: false }).click();
   await page.getByRole('button', { name: 'Restart the descent' }).click();
-  await expect(page.locator('#playground')).toHaveClass(/electric/);
+  await expect(page.locator('#playground')).toHaveClass(/ember/);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   expect(errors).toEqual([]);
 });
 test('roaming spider travels beyond its web and really disappears behind an object', async ({
   page,
 }) => {
+  await page.clock.install({ time: '2026-11-08T12:00:00Z' });
   await page.addInitScript(() => {
     Math.random = () => 0.1;
   });
   await ready(page);
+  await page.clock.pauseAt('2026-11-08T12:01:00Z');
   await page.evaluate(() => {
     window.spider.destroy();
     window.spider = window.createSpider({
@@ -187,26 +189,23 @@ test('roaming spider travels beyond its web and really disappears behind an obje
     });
   });
   const start = await page.evaluate(() => window.spider.getState().spiders[0]!);
-  await expect
-    .poll(
-      () =>
-        page.evaluate(({ x, y }) => {
-          const s = window.spider.getState().spiders[0]!;
-          return Math.hypot(s.x - x, s.y - y);
-        }, start),
-      { timeout: 8000 },
-    )
-    .toBeGreaterThan(30);
-  await expect
-    .poll(() => page.evaluate(() => window.spider.getState().spiders[0]!.visible), {
-      timeout: 12000,
-    })
-    .toBe(false);
-  await expect
-    .poll(() => page.evaluate(() => window.spider.getState().spiders[0]!.visible), {
-      timeout: 12000,
-    })
-    .toBe(true);
+  let moved = false,
+    hidden = false,
+    emerged = false;
+  // Advance every animation callback; real-frame throttling on hosted WebKit cannot set the deadline.
+  for (let step = 0; step < 80; step++) {
+    await page.clock.runFor(250);
+    const s = await page.evaluate(() => window.spider.getState().spiders[0]!);
+    moved ||= Math.hypot(s.x - start.x, s.y - start.y) > 30;
+    if (!s.visible) hidden = true;
+    if (hidden && s.visible) {
+      emerged = true;
+      break;
+    }
+  }
+  expect(moved).toBe(true);
+  expect(hidden).toBe(true);
+  expect(emerged).toBe(true);
 });
 test('roaming works on a bare page and can cross the initial card boundary', async ({ page }) => {
   await page.addInitScript(() => {

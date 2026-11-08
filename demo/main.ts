@@ -35,7 +35,7 @@ shy.addEventListener('change', () => spider.update({ fearRadius: shy.checked ? 1
 get('clear-webs').addEventListener('click', () => spider.clearWebs());
 document.querySelectorAll<HTMLButtonElement>('[data-theme]').forEach((button) =>
   button.addEventListener('click', () => {
-    hero.classList.remove('electric', 'paper', 'dark');
+    hero.classList.remove('ember', 'paper', 'dark');
     hero.classList.add(button.dataset.theme!);
     document
       .querySelectorAll('[data-theme]')
@@ -58,10 +58,10 @@ get('reset').addEventListener('click', () => {
   get('size-value').textContent = '1.6×';
   get('web-value').textContent = '160px';
   hero.classList.remove('paper', 'dark');
-  hero.classList.add('electric');
+  hero.classList.add('ember');
   document
     .querySelectorAll<HTMLButtonElement>('[data-theme]')
-    .forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.theme === 'electric')));
+    .forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.theme === 'ember')));
   setPause(false);
   mount();
 });
