@@ -148,14 +148,12 @@ test('marketing page controls, code tabs, and responsive layout work', async ({ 
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
   await page.goto('/');
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('In the corners.');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('spider.');
   await expect(page.locator('[data-fluri-spider]')).toHaveCount(1);
   await page.getByRole('button', { name: 'After dark', exact: true }).click();
-  await expect(page.locator('#stage')).toHaveClass(/dark/);
-  await page.getByRole('button', { name: /Take a little nap/ }).click();
+  await expect(page.locator('#playground')).toHaveClass(/dark/);
+  await page.getByRole('button', { name: /Pause resident/ }).click();
   await expect(page.locator('#pause')).toHaveAttribute('aria-pressed', 'true');
-  await page.getByRole('button', { name: 'Switch the layers' }).click();
-  await expect(page.locator('#stage')).toHaveClass(/flipped/);
   await page.getByRole('tab', { name: 'React', exact: true }).click();
   await expect(page.locator('#code')).toContainText('useEffect');
   await page.getByRole('tab', { name: 'React', exact: true }).press('ArrowRight');
@@ -163,8 +161,9 @@ test('marketing page controls, code tabs, and responsive layout work', async ({ 
     'aria-selected',
     'true',
   );
-  await page.getByRole('button', { name: 'Reset the playground' }).click();
-  await expect(page.locator('#stage')).not.toHaveClass(/dark|flipped/);
+  await page.getByRole('button', { name: 'Clear silk', exact: false }).click();
+  await page.getByRole('button', { name: 'Restart the descent' }).click();
+  await expect(page.locator('#playground')).toHaveClass(/electric/);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   expect(errors).toEqual([]);
 });
@@ -178,7 +177,8 @@ test('roaming spider travels beyond its web and really disappears behind an obje
   await page.evaluate(() => {
     window.spider.destroy();
     window.spider = window.createSpider({
-      targets: '[data-spider-web]',
+      targets: [],
+      objects: '#target',
       entrance: 'appear',
       roam: true,
       speed: 3,
@@ -337,7 +337,7 @@ test('scrolling preserves document position and completed silk', async ({ page }
   expect(after.y).toBe(before.y);
   expect(after.threads).toBe(before.threads);
 });
-test('Shift and primary-button hold erase a whole woven group', async ({ page }) => {
+test('clicks and Shift-drag preserve silk; clearWebs removes it explicitly', async ({ page }) => {
   await startLoom(page);
   await expect
     .poll(() => page.evaluate(() => window.spider.getState().spiders[0]!.threads), {
@@ -345,27 +345,18 @@ test('Shift and primary-button hold erase a whole woven group', async ({ page })
     })
     .toBeGreaterThan(4);
   await page.evaluate(() => window.spider.pause());
-  const point = await page.evaluate(() => {
-    const c = document.querySelector<HTMLCanvasElement>('[data-fluri-spider]')!,
-      ctx = c.getContext('2d')!,
-      dpr = c.width / innerWidth;
-    const data = ctx.getImageData(0, 0, c.width, c.height).data,
-      spider = window.spider.getState().spiders[0]!;
-    for (let y = 110; y < 300; y += 2)
-      for (let x = 35; x < Math.min(innerWidth - 5, 500); x += 2) {
-        const px = Math.round(x * dpr),
-          py = Math.round(y * dpr),
-          alpha = data[(py * c.width + px) * 4 + 3]!;
-        if (alpha > 12 && Math.hypot(x - spider.x, y - spider.y) > 70) return { x, y };
-      }
-    throw new Error('No woven silk found away from the resident');
-  });
+  const point = { x: 180, y: 155 };
+  const count = await page.evaluate(() => window.spider.getState().spiders[0]!.threads);
+  await page.mouse.click(point.x, point.y);
+  expect(await page.evaluate(() => window.spider.getState().spiders[0]!.threads)).toBe(count);
   await page.keyboard.down('Shift');
   await page.mouse.move(point.x, point.y);
   await page.mouse.down();
   await page.mouse.move(point.x + 6, point.y + 4);
   await page.mouse.up();
   await page.keyboard.up('Shift');
+  expect(await page.evaluate(() => window.spider.getState().spiders[0]!.threads)).toBe(count);
+  await page.evaluate(() => window.spider.clearWebs());
   expect(await page.evaluate(() => window.spider.getState().spiders[0]!.threads)).toBe(0);
   expect(await page.evaluate(() => window.spider.getState().state)).toBe('paused');
 });

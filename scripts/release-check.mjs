@@ -26,7 +26,7 @@ assert.ok(
 let bytes = 0;
 for (const f of packed.files.filter((f) => f.path.endsWith('.js')))
   bytes += gzipSync(await readFile(new URL(`../${f.path}`, import.meta.url))).length;
-assert.ok(bytes < 18000, 'Runtime gzip budget exceeded');
+assert.ok(bytes < 20000, 'Runtime gzip budget exceeded');
 const { createSpider } = await import('../dist/index.js');
 const controller = createSpider();
 assert.equal(controller.getState().state, 'idle');

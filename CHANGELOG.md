@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.1 — 2026-11-08
+
+- Rebuild the website as a cobalt live habitat with oversized typography, dark controls, and improved runtime previews.
+- Sample actual font ink contours and affine object edges for silk attachments.
+- Weave layered hanging sheets with catenary-profile strands and staggered cross-ties.
+
+- Remove pointer-driven web erasing. Clicking, Shift-clicking, and dragging preserve woven silk and ordinary page interactions.
+- Keep explicit removal through clearWebs() and the playground’s Clear webs button.
+
 ## 0.1.0 — 2026-11-08
 
 - Original procedural jumping spider with articulated striped legs, fuzzy outlines, glossy blinking eyes, and stable coloring.

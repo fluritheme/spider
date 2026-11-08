@@ -3,245 +3,186 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <meta name="theme-color" content="#f5f2eb" />
-    <title>Spider by Fluri — a little life for your website</title>
+    <meta name="theme-color" content="#1719df" />
+    <title>Spider by Fluri — let a little life in.</title>
     <meta
       name="description"
-      content="Meet your website's smallest resident. A minimal, expressive spider with delicate, layer-aware webs. Zero dependencies. Made for every screen."
+      content="An expressive little spider that makes your website its home. Watch it descend, weave real silk between letters, explore, and hide behind your content."
     />
     <link rel="canonical" href="https://spider.fluri.xyz/" />
     <link rel="icon" href="/spider.svg" type="image/svg+xml" />
-    <meta property="og:title" content="Spider by Fluri — a little life for your website" />
-    <meta
-      property="og:description"
-      content="Delicate webs. Blinking eyes. A healthy fear of your cursor. Meet @fluritheme/spider."
-    />
+    <meta property="og:title" content="Spider by Fluri — let a little life in." />
+    <meta property="og:description" content="Eight legs. Real silk. Your website is his now." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://spider.fluri.xyz/" />
     <meta property="og:image" content="https://spider.fluri.xyz/social.png" />
     <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preload" href="/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="/style.css" />
   </head>
   <body>
-    <header class="site-header wrap">
-      <a class="brand" href="#" aria-label="Spider by Fluri home"
-        ><img src="/spider.svg" width="32" height="32" alt="" />spider<span>by Fluri</span></a
-      >
-      <nav aria-label="Main navigation">
-        <a href="#playground">Playground</a
-        ><a href="#install">Get started <span aria-hidden="true">↗</span></a
-        ><a class="github" href="https://github.com/fluritheme/spider"
-          >GitHub <span aria-hidden="true">↗</span></a
+    <section class="hero electric" id="playground" aria-labelledby="hero-title">
+      <header class="header">
+        <a class="wordmark" href="#" aria-label="Spider by Fluri home"
+          ><img src="/spider.svg" width="28" height="28" alt="" />spider<span>BY FLURI</span></a
         >
-      </nav>
-    </header>
-    <main>
-      <section class="hero wrap" aria-labelledby="hero-title">
-        <div class="eyebrow">
-          <span class="pip"></span> SMALL PACKAGE. EIGHT LEGS. BIG PERSONALITY.
+        <nav aria-label="Main navigation">
+          <a href="#details">The little details</a><a href="#install">Install ↗</a
+          ><a href="https://github.com/fluritheme/spider">GitHub ↗</a>
+        </nav>
+      </header>
+      <div
+        id="stage"
+        class="habitat"
+        role="region"
+        aria-label="Live spider habitat: the actual package descends and weaves across this page"
+      >
+        <div class="hero-topline">
+          <span>A SMALL UNINVITED GUEST.</span><span>100% AT HOME ON YOUR WEBSITE.</span>
         </div>
-        <h1 id="hero-title">A little life.<br />In the <em>corners.</em></h1>
-        <p class="hero-description">
-          Meet your website’s smallest resident. Delicate webs,<br class="desktop-break" />
-          curious eyes, and a whole page to explore.
+        <h1 id="hero-title" data-spider-text>spider.</h1>
+        <div class="hero-intro">
+          <p>Your website.<br /><span>His now.</span></p>
+          <div>
+            <p>
+              A curious little resident. Eight articulated legs.<br />Silk he actually spins. A very
+              healthy fear of your cursor.
+            </p>
+            <a class="inline-link" href="#install">Let a little life in <span>↗</span></a>
+          </div>
+        </div>
+        <article class="resident-tag object-one" data-spider-web="top-right" data-spider-object>
+          <span class="tiny">A NOTE FROM THE RESIDENT</span><strong>i live<br />here now.</strong
+          ><span class="tag-bottom">PLEASE APPROACH GENTLY. <b>↗</b></span>
+        </article>
+        <article class="resident-tag object-two" data-spider-web="top-left" data-spider-object>
+          <span class="tiny">GOOD THINGS TAKE A LITTLE SILK.</span
+          ><strong>do not<br />disturb.</strong
+          ><span class="tag-bottom">WEB UNDER CONSTRUCTION. <b>✳</b></span>
+        </article>
+        <div class="telemetry" data-spider-ui>
+          <span><i class="signal"></i> LIVE RESIDENT</span
+          ><span id="activity">DESCENDING ON SILK</span
+          ><span><b id="thread-count">000</b> THREADS LAID</span>
+        </div>
+      </div>
+      <div class="hero-bottom">
+        <span>WATCH HIM BUILD. MOVE CLOSER. GIVE HIM A MINUTE.</span
+        ><a href="#controls">Make yourself at home <span>↓</span></a>
+      </div>
+    </section>
+    <main>
+      <section
+        id="controls"
+        class="control-strip"
+        aria-label="Customize your resident"
+        data-spider-ui
+      >
+        <div class="control-title">
+          <span class="eyebrow">YOUR LITTLE RESIDENT</span>
+          <h2>Settle him in.</h2>
+        </div>
+        <div class="settings">
+          <fieldset>
+            <legend>The surroundings</legend>
+            <div class="environment">
+              <button data-theme="electric" aria-pressed="true">Electric</button
+              ><button data-theme="paper" aria-pressed="false">Paper</button
+              ><button data-theme="dark" aria-pressed="false">After dark</button>
+            </div>
+          </fieldset>
+          <div class="slider">
+            <label for="spider-size"
+              >Presence <output id="size-value" for="spider-size">1.6×</output></label
+            ><input id="spider-size" type="range" min="0.7" max="2" step="0.1" value="1.6" />
+          </div>
+          <div class="slider">
+            <label for="web-size">Reach <output id="web-value" for="web-size">160px</output></label
+            ><input id="web-size" type="range" min="60" max="240" step="10" value="160" />
+          </div>
+          <label class="switch"
+            ><input id="shy" type="checkbox" checked role="switch" /><span
+              >Shy by nature</span
+            ></label
+          >
+        </div>
+        <div class="transport">
+          <button id="pause" aria-pressed="false">Ⅱ Pause resident</button
+          ><button id="clear-webs">Clear silk ↗</button
+          ><button id="reset" aria-label="Restart the descent">Restart ↓</button>
+        </div>
+        <p class="control-caption">
+          The actual npm package, right here. Every strand is woven by the spider. He and his silk
+          stay with the page as you scroll.
         </p>
-        <div class="hero-actions">
-          <a class="button primary" href="#playground"
-            >Meet the spider <span aria-hidden="true">↓</span></a
-          ><button
-            class="install-command"
+      </section>
+      <section id="details" class="details section-pad" aria-labelledby="details-title">
+        <div class="section-heading">
+          <span class="eyebrow">SMALL CREATURE. REAL PRESENCE.</span>
+          <h2 id="details-title">A website with<br /><span>a life of its own.</span></h2>
+          <p>
+            A little personality, thoughtfully built.<br />No sprite downloads. No stylesheet. No
+            runtime dependencies.
+          </p>
+        </div>
+        <div class="behavior-list">
+          <article>
+            <span class="number">01 /</span>
+            <div>
+              <h3>He makes himself at home.</h3>
+              <p>
+                Down a single silk thread. Onto the letters. Then support cables, loose hanging
+                strands, and the little stitches between them. Watch the web build, one journey at a
+                time.
+              </p>
+            </div>
+            <span class="behavior-glyph" aria-hidden="true">⌁</span>
+          </article>
+          <article>
+            <span class="number">02 /</span>
+            <div>
+              <h3>He notices you.</h3>
+              <p>
+                Glossy eyes follow your pointer. Eight little legs find their rhythm. Get a little
+                too close and he scurries for cover. On a phone, a tap gets his attention.
+              </p>
+            </div>
+            <span class="behavior-glyph" aria-hidden="true">↖</span>
+          </article>
+          <article>
+            <span class="number">03 /</span>
+            <div>
+              <h3>He knows his place.</h3>
+              <p>
+                Behind a card. Along a heading. Under a button. He explores the document and
+                understands real objects. Your clicks, scrolling, and text stay yours.
+              </p>
+            </div>
+            <span class="behavior-glyph" aria-hidden="true">▱</span>
+          </article>
+        </div>
+      </section>
+      <section class="spec-strip" aria-label="Package qualities">
+        <span>ZERO DEPENDENCIES</span><span>ORIGINAL VECTOR CHARACTER</span
+        ><span>REDUCED-MOTION AWARE</span><span>MIT LICENSED</span>
+      </section>
+      <section id="install" class="install section-pad" aria-labelledby="install-title">
+        <div class="install-top">
+          <span class="eyebrow">MAKE ROOM FOR ONE MORE.</span>
+          <h2 id="install-title">Invite him in.</h2>
+          <button
+            class="command"
             data-copy="npm install @fluritheme/spider"
             aria-label="Copy npm install command"
           >
-            <span aria-hidden="true">$</span> npm i @fluritheme/spider
-            <span class="copy-icon" aria-hidden="true">⧉</span>
+            <span>$</span> npm i @fluritheme/spider <span>⧉</span>
           </button>
-        </div>
-        <div class="hero-footnote">
-          Zero dependencies <span>·</span> TypeScript <span>·</span> MIT licensed <span>·</span> No
-          CSS to import
-        </div>
-        <svg
-          class="hero-doodle"
-          width="130"
-          height="170"
-          viewBox="0 0 130 170"
-          fill="none"
-          aria-hidden="true"
-        >
-          <path
-            d="M95 0v60q-25 40-5 55"
-            stroke="currentColor"
-            stroke-width="1"
-            stroke-dasharray="3 5"
-          />
-          <path d="m81 106 9 11 6-13" stroke="currentColor" stroke-width="1.3" />
-          <text
-            x="2"
-            y="152"
-            fill="currentColor"
-            font-family="Georgia,serif"
-            font-size="16"
-            font-style="italic"
-            transform="rotate(-8 2 152)"
-          >
-            a little shy, actually.
-          </text>
-        </svg>
-      </section>
-      <section id="playground" class="playground wrap" aria-labelledby="play-title">
-        <div class="section-top">
-          <div>
-            <span class="section-number">01 / MEET YOUR NEW RESIDENT</span>
-            <h2 id="play-title">Make yourself at home.</h2>
-          </div>
-          <span class="live-label"><span class="pip"></span> LIVE PLAYGROUND</span>
-        </div>
-        <div class="studio">
-          <div class="stage-shell">
-            <div class="browser-bar">
-              <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span
-              ><span>your-little-corner.com</span
-              ><span class="browser-mark" aria-hidden="true">↗</span>
-            </div>
-            <div
-              id="stage"
-              class="stage"
-              role="region"
-              aria-label="Live spider demo; the spider can leave this area and explore the whole page"
-            >
-              <div class="stage-grid" aria-hidden="true"></div>
-              <div class="stage-label">A WEBSITE, WITH A LITTLE MORE SOUL.</div>
-              <article class="demo-card back-card" data-spider-web="top-left">
-                <span class="card-kicker">THE QUIET CORNER</span>
-                <p>Something<br />small.<br /><em>Something alive.</em></p>
-                <div class="card-bottom">
-                  <span>A GOOD PLACE TO HANG OUT.</span><span aria-hidden="true">✳</span>
-                </div>
-              </article>
-              <article class="demo-card note-card" data-spider-web="top-right">
-                <span class="card-kicker">A NOTE FROM THE RESIDENT</span>
-                <h3>Oh, hi there.</h3>
-                <p>I made a little web.<br />Hope you don’t mind.</p>
-                <div class="handwritten">Please approach gently.</div>
-                <span class="note-number">08 legs / 01 heart</span>
-              </article>
-              <div class="mini-card" data-spider-web="top-right">
-                <span class="mini-icon" aria-hidden="true">✧</span>
-                <div>Good things live<br /><strong>in the details.</strong></div>
-              </div>
-              <span class="stage-caption"
-                >I can wander beyond this little window. <span aria-hidden="true">↗</span></span
-              >
-            </div>
-            <div class="stage-toolbar">
-              <button id="layer-button" class="text-button">
-                <span aria-hidden="true">▱</span> Switch the layers</button
-              ><span id="activity" role="status"
-                >Page anchored. Every thread woven by the spider.</span
-              ><button id="reset" class="text-button" aria-label="Reset the playground">
-                <span aria-hidden="true">↻</span> Reset
-              </button>
-            </div>
-          </div>
-          <aside class="controls" aria-label="Customize the spider">
-            <div class="controls-heading">
-              <span class="section-number">THE LITTLE DETAILS</span>
-              <h3>Your spider, your way.</h3>
-            </div>
-            <fieldset>
-              <legend>Set the mood</legend>
-              <div class="segmented">
-                <button data-theme="light" aria-pressed="true">Daylight</button
-                ><button data-theme="dark" aria-pressed="false">After dark</button>
-              </div>
-            </fieldset>
-            <label class="range-label" for="spider-size"
-              >A little or a lot <output id="size-value" for="spider-size">1.2×</output></label
-            ><input id="spider-size" type="range" min="0.6" max="1.8" step="0.1" value="1.2" />
-            <label class="range-label" for="web-size"
-              >Room for silk <output id="web-value" for="web-size">140px</output></label
-            ><input id="web-size" type="range" min="60" max="180" step="10" value="140" />
-            <div class="switch-row">
-              <label for="shy">A little shy <small>Scurries away from your cursor</small></label
-              ><input id="shy" type="checkbox" checked role="switch" />
-            </div>
-            <div class="switch-row">
-              <label for="webs"
-                >Leave a little silk <small>Delicate webs in every corner</small></label
-              ><input id="webs" type="checkbox" checked role="switch" />
-            </div>
-            <button id="pause" class="button pause-button" aria-pressed="false">
-              <span aria-hidden="true">Ⅱ</span> Take a little nap
-            </button>
-            <button id="clear-webs" class="button pause-button">
-              Clear the webs <span aria-hidden="true">↺</span>
-            </button>
-            <p class="controls-note">
-              The actual package, running right here.<br />Shift + hold & drag to sweep away a web.
-            </p>
-          </aside>
-        </div>
-      </section>
-      <section class="craft wrap" aria-labelledby="craft-title">
-        <div class="craft-intro">
-          <span class="section-number">02 / THOUGHTFULLY TINY</span>
-          <h2 id="craft-title">Small presence.<br /><em>Considered details.</em></h2>
           <p>
-            A delightful extra that knows its place.<br />Built to feel at home on your website.
+            A few lines. Then give him a little time to get comfortable.<br />JavaScript, React,
+            Vue, Next.js—he travels light.
           </p>
         </div>
-        <div class="craft-list">
-          <article>
-            <span class="feature-symbol" aria-hidden="true">▱</span>
-            <div>
-              <h3>Knows the layers.</h3>
-              <p>
-                Webs follow real page elements. Scroll, resize, or bring a card forward—the silk
-                follows, with foreground visibility checked by the browser.
-              </p>
-            </div>
-            <span class="feature-index">01</span>
-          </article>
-          <article>
-            <span class="feature-symbol" aria-hidden="true">☉</span>
-            <div>
-              <h3>A small spider. A whole world.</h3>
-              <p>
-                Blinking eyes, curious glances, a gentle sway. Watch articulated legs explore your
-                whole page, spin silk between letters, and slip behind objects. Get too close and it
-                scurries away.
-              </p>
-            </div>
-            <span class="feature-index">02</span>
-          </article>
-          <article>
-            <span class="feature-symbol" aria-hidden="true">⌘</span>
-            <div>
-              <h3>A good guest, everywhere.</h3>
-              <p>
-                Responsive webs, touch reactions, and respect for reduced motion. Clicks pass
-                through. Hidden tabs take a rest. No tracking, no runtime dependencies.
-              </p>
-            </div>
-            <span class="feature-index">03</span>
-          </article>
-        </div>
-      </section>
-      <section id="install" class="install-section wrap" aria-labelledby="install-title">
-        <div class="install-heading">
-          <span class="section-number">03 / MAKE ROOM FOR ONE MORE</span>
-          <h2 id="install-title">A few lines.<br /><em>Eight little legs.</em></h2>
-          <p>
-            Works with plain HTML, React, Vue, and the rest.<br />Mark a corner. Let your little
-            resident roam.
-          </p>
-          <button class="install-command" data-copy="npm install @fluritheme/spider">
-            <span aria-hidden="true">$</span> npm i @fluritheme/spider
-            <span aria-hidden="true">⧉</span>
-          </button>
-        </div>
-        <div class="code-panel">
+        <div class="code-window">
           <div class="code-tabs" role="tablist" aria-label="Installation framework">
             <button
               role="tab"
@@ -277,72 +218,79 @@
             aria-labelledby="tab-vanilla"
             tabindex="0"
           ><code id="code"></code></pre>
-          <div class="code-bottom">
-            <span class="pip"></span> No stylesheets. No dependencies. A very good guest.
+          <div class="code-footer">
+            <span>ESM + TYPESCRIPT TYPES</span
+            ><a href="https://github.com/fluritheme/spider#readme">The full API ↗</a>
           </div>
         </div>
       </section>
-      <section class="questions wrap" aria-labelledby="questions-title">
+      <section class="questions section-pad" aria-labelledby="questions-title">
         <div>
-          <span class="section-number">A FEW THINGS TO KNOW</span>
-          <h2 id="questions-title">The fine threads.</h2>
+          <span class="eyebrow">THE FINE THREADS.</span>
+          <h2 id="questions-title">A good guest.</h2>
         </div>
-        <div class="question-list">
+        <div>
           <details>
-            <summary>Will it get in the way?</summary>
+            <summary>Will he get in the way?</summary>
             <p>
               The decorative canvas ignores pointer events and stays out of the accessibility tree.
-              Your links, text selection, and scrolling keep working. Use
-              <code>data-spider-ignore</code> to keep any area spider-free.
+              Links, text selection, and scrolling keep working. Webs stay in place when clicked;
+              remove them explicitly with the Clear silk button or the API.
             </p>
           </details>
           <details>
-            <summary>What about phones and reduced motion?</summary>
+            <summary>Does he work on phones?</summary>
             <p>
-              The spider works in page coordinates on every screen. Tap near the spider to startle
-              it. It explores the document and takes shelter behind cards and other objects. With
-              reduced motion enabled, it becomes a still illustration; blinking, weaving, swaying,
-              and pointer reactions stop.
+              Yes. The scene responds to the page layout and touch input. He and the silk stay
+              anchored to the document as you scroll. With reduced motion enabled, he stays still
+              and does not automatically weave nets.
             </p>
           </details>
           <details>
-            <summary>How does it understand layers?</summary>
+            <summary>How does the web attach to letters?</summary>
             <p>
-              It measures marked elements, intersects overflow containers, clips rounded corners,
-              and samples browser hit-testing for foreground occlusion. It works best with
-              rectangular cards. Visibility masks use a 12px grid; rotated shapes,
-              pointer-transparent overlays, shadow DOM interiors, and iframe content have limits.
-              See the README for details.
+              Text ranges and a small local font mask approximate the visible edges of letters. The
+              spider visits those attachment points and physically traverses the silk it lays.
+              Finished supports follow ordinary layout changes. Perspective, complex clipping, and
+              glyph shaping have documented limits.
             </p>
           </details>
           <details>
-            <summary>Can I make it my own?</summary>
+            <summary>Can I make him my own?</summary>
             <p>
-              Choose color, scale, speed, web span, opacity, fear radius, and resident count. Use
-              the controller to pause, resume, refresh, or remove everything. Source and full API
-              documentation are on <a href="https://github.com/fluritheme/spider#readme">GitHub</a>.
+              Choose scale, speed, silk density, reach, opacity, resident count, and pointer fear.
+              Pause, resume, or clear the silk. The source and
+              <a href="https://github.com/fluritheme/spider#options">complete options</a> are on
+              GitHub.
             </p>
           </details>
         </div>
       </section>
-      <section class="closing wrap">
-        <span class="closing-star" aria-hidden="true">✳</span>
-        <p>The internet could use<br /><em>a little more character.</em></p>
-        <a href="https://www.npmjs.com/package/@fluritheme/spider" class="button primary"
-          >Give it a little spider <span aria-hidden="true">↗</span></a
-        >
-      </section>
     </main>
-    <footer class="wrap">
-      <a class="brand" href="https://fluri.xyz/">spider<span>A little creation by Fluri.</span></a
-      ><span>Open source. Made with care.</span>
-      <div>
-        <a href="https://github.com/fluritheme/spider">GitHub ↗</a
-        ><a href="https://www.npmjs.com/package/@fluritheme/spider">npm ↗</a
-        ><a href="https://fluri.xyz/">Fluri ↗</a>
+    <footer class="footer section-pad">
+      <div class="footer-top">
+        <a class="wordmark" href="https://fluri.xyz/"
+          >spider<span>A LITTLE CREATION BY FLURI.</span></a
+        >
+        <div>
+          <a href="https://github.com/fluritheme/spider">GitHub ↗</a
+          ><a href="https://www.npmjs.com/package/@fluritheme/spider">npm ↗</a
+          ><a href="https://fluri.xyz/">Fluri ↗</a>
+        </div>
+      </div>
+      <p>
+        Let a little<br /><span>life in.</span
+        ><a
+          href="https://www.npmjs.com/package/@fluritheme/spider"
+          aria-label="Install Spider from npm"
+          >↗</a
+        >
+      </p>
+      <div class="footer-bottom">
+        <span>OPEN SOURCE. MADE WITH CARE.</span><span>© FLURI / 2026</span>
       </div>
     </footer>
-    <div id="toast" role="status" class="toast" hidden>Copied. Make room for a little friend.</div>
+    <div id="toast" role="status" hidden>Copied.</div>
     <script type="module" src="/main.ts"></script>
   </body>
 </html>

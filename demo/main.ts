@@ -1,12 +1,11 @@
 import { createSpider, type SpiderController } from '../src/index';
 const get = <T extends HTMLElement>(id: string): T => document.getElementById(id) as T;
-const stage = get<HTMLDivElement>('stage');
-let spider: SpiderController;
-let paused = false;
+const hero = get<HTMLElement>('playground');
+let spider: SpiderController,
+  paused = false;
 const size = get<HTMLInputElement>('spider-size'),
-  webSize = get<HTMLInputElement>('web-size');
-const shy = get<HTMLInputElement>('shy'),
-  webs = get<HTMLInputElement>('webs');
+  webSize = get<HTMLInputElement>('web-size'),
+  shy = get<HTMLInputElement>('shy');
 function mount(): void {
   spider?.destroy();
   spider = createSpider({
@@ -15,9 +14,10 @@ function mount(): void {
     maxWebs: 3,
     size: Number(size.value),
     webSize: Number(webSize.value),
+    speed: 1.3,
     fearRadius: shy.checked ? 120 : 0,
-    webOpacity: webs.checked ? 0.48 : 0,
-    weave: true,
+    webOpacity: 0.68,
+    webDensity: 0.85,
     zIndex: 50,
   });
   if (paused) spider.pause();
@@ -32,49 +32,55 @@ webSize.addEventListener('input', () => {
   spider.update({ webSize: Number(webSize.value) });
 });
 shy.addEventListener('change', () => spider.update({ fearRadius: shy.checked ? 120 : 0 }));
-webs.addEventListener('change', () => spider.update({ webOpacity: webs.checked ? 0.48 : 0 }));
 get('clear-webs').addEventListener('click', () => spider.clearWebs());
 document.querySelectorAll<HTMLButtonElement>('[data-theme]').forEach((button) =>
   button.addEventListener('click', () => {
-    stage.classList.toggle('dark', button.dataset.theme === 'dark');
+    hero.classList.remove('electric', 'paper', 'dark');
+    hero.classList.add(button.dataset.theme!);
     document
       .querySelectorAll('[data-theme]')
       .forEach((b) => b.setAttribute('aria-pressed', String(b === button)));
     spider.refresh();
   }),
 );
-get('layer-button').addEventListener('click', () => {
-  const flipped = stage.classList.toggle('flipped');
-  get('layer-button').setAttribute('aria-pressed', String(flipped));
-  get('activity').textContent = flipped
-    ? 'The back card is now in front. Watch the silk.'
-    : 'One curious resident. The whole page to explore.';
-  spider.refresh();
-});
 function setPause(value: boolean): void {
   paused = value;
   if (paused) spider.pause();
   else spider.resume();
-  get('pause').textContent = paused ? '▷ Wake the little resident' : 'Ⅱ Take a little nap';
+  get('pause').textContent = paused ? '▷ Resume resident' : 'Ⅱ Pause resident';
   get('pause').setAttribute('aria-pressed', String(paused));
 }
 get('pause').addEventListener('click', () => setPause(!paused));
 get('reset').addEventListener('click', () => {
-  size.value = '1.2';
-  webSize.value = '140';
+  size.value = '1.6';
+  webSize.value = '160';
   shy.checked = true;
-  webs.checked = true;
-  get('size-value').textContent = '1.2×';
-  get('web-value').textContent = '140px';
-  stage.classList.remove('dark', 'flipped');
+  get('size-value').textContent = '1.6×';
+  get('web-value').textContent = '160px';
+  hero.classList.remove('paper', 'dark');
+  hero.classList.add('electric');
   document
     .querySelectorAll<HTMLButtonElement>('[data-theme]')
-    .forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.theme === 'light')));
-  get('layer-button').setAttribute('aria-pressed', 'false');
-  get('activity').textContent = 'One curious resident. The whole page to explore.';
+    .forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.theme === 'electric')));
   setPause(false);
   mount();
 });
+const behaviors: Record<string, string> = {
+  descending: 'DESCENDING ON SILK',
+  weaving: 'WEAVING A LITTLE HOME',
+  exploring: 'EXPLORING THE PAGE',
+  resting: 'TAKING A MOMENT',
+  hiding: 'A LITTLE HIDE & SEEK',
+  fleeing: 'A LITTLE TOO CLOSE',
+};
+const statusTimer = setInterval(() => {
+  const resident = spider.getState().spiders[0];
+  if (!resident) return;
+  const status = paused ? 'TAKING A LITTLE NAP' : (behaviors[resident.behavior] ?? 'AT HOME');
+  if (get('activity').textContent !== status) get('activity').textContent = status;
+  const count = String(resident.threads).padStart(3, '0');
+  if (get('thread-count').textContent !== count) get('thread-count').textContent = count;
+}, 500);
 const examples = {
   vanilla: `import { createSpider } from '@fluritheme/spider';\n\n// Add data-spider-web to a card in your HTML.\n// <article data-spider-web="top-right">…</article>\nconst spider = createSpider({\n  targets: '[data-spider-web]',\n  size: 1,\n  fearRadius: 110,\n});\n\n// When your page unmounts:\nspider.destroy();`,
   react: `import { useEffect } from 'react';\nimport { createSpider } from '@fluritheme/spider';\n\nexport function Card() {\n  useEffect(() => {\n    const spider = createSpider();\n    return () => spider.destroy();\n  }, []);\n\n  return <article data-spider-web="top-right">\n    A little room for a little resident.\n  </article>;\n}`,
@@ -131,6 +137,7 @@ get('copy-code').addEventListener('click', () => {
 });
 window.addEventListener('pagehide', () => {
   spider.destroy();
+  clearInterval(statusTimer);
   clearTimeout(toastTimer);
 });
 window.addEventListener('pageshow', (event) => {

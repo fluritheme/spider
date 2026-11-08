@@ -11,13 +11,7 @@ export type {
   SpiderTuning,
 } from './types.js';
 import { pageObjects, outsideObjects, type PageObject } from './objects.js';
-import {
-  makeResident,
-  stepResident,
-  paintThreads,
-  curvePoint,
-  type Resident as Roamer,
-} from './resident.js';
+import { makeResident, stepResident, paintThreads, type Resident as Roamer } from './resident.js';
 import { measureNetwork, type SilkNetwork } from './silk.js';
 interface Resident {
   element: HTMLElement;
@@ -107,9 +101,6 @@ export function createSpider(input: SpiderOptions = {}): SpiderController {
     dpr = 1;
   let lastMeasure = -Infinity;
   let silkCleared = false;
-  let erasing = false;
-  let suppressClick = false;
-  let suppressUntil = 0;
   let pointer: Point | null = null,
     pointerUntil = Infinity;
   const birth = new WeakMap<HTMLElement, number>();
@@ -325,6 +316,7 @@ export function createSpider(input: SpiderOptions = {}): SpiderController {
             network.anchors,
             options.webDensity,
             options.webSize,
+            options.color,
           );
         const ink = options.color === 'auto' ? '#6c5140' : options.color;
         resident.ink = ink;
@@ -343,7 +335,7 @@ export function createSpider(input: SpiderOptions = {}): SpiderController {
             resident.y - resident.dragFrom.y,
           );
           if (distance > 3) {
-            ctx.strokeStyle = '#8d8172';
+            ctx.strokeStyle = resident.silkInk;
             ctx.lineWidth = 0.65;
             ctx.globalAlpha = options.webOpacity * 0.7;
             ctx.beginPath();
@@ -359,7 +351,7 @@ export function createSpider(input: SpiderOptions = {}): SpiderController {
         }
 
         if (resident.tether && options.webOpacity > 0 && resident.behavior !== 'descending') {
-          ctx.strokeStyle = '#8d8172';
+          ctx.strokeStyle = resident.silkInk;
           ctx.lineWidth = 0.7;
           ctx.globalAlpha = options.webOpacity;
           ctx.beginPath();
@@ -459,129 +451,16 @@ export function createSpider(input: SpiderOptions = {}): SpiderController {
     });
     schedule();
   }
-  function distanceToSegment(p: Point, a: Point, b: Point): number {
-    const dx = b.x - a.x,
-      dy = b.y - a.y;
-    const t = clamp(((p.x - a.x) * dx + (p.y - a.y) * dy) / (dx * dx + dy * dy || 1), 0, 1);
-    return Math.hypot(p.x - a.x - dx * t, p.y - a.y - dy * t);
-  }
-  function eraseAt(point: Point): boolean {
-    let removed = false;
-    roamers.forEach((r) => {
-      const hit = new Set<number>();
-      if (
-        r.tether &&
-        distanceToSegment(point, r.tether, r.behavior === 'descending' ? r : r.landing) < 24
-      ) {
-        hit.add(1);
-        r.tether = null;
-        removed = true;
-      }
-
-      r.threads.forEach((thread) => {
-        let previous = thread.from;
-        for (let step = 1; step <= 24; step++) {
-          const next = curvePoint(thread.from, thread.to, thread.sag, (step / 24) * thread.laid);
-          if (distanceToSegment(point, previous, next) < 24) {
-            hit.add(thread.group);
-            break;
-          }
-          previous = next;
-        }
-      });
-      if (hit.size) {
-        if (hit.has(1)) r.tether = null;
-        if (hit.has(r.woven)) r.dragFrom = null;
-        r.threads = r.threads.filter((t) => !hit.has(t.group));
-        removed = true;
-        if (r.activeThread && hit.has(r.activeThread.group)) {
-          r.tasks = [];
-          r.task = null;
-          r.activeThread = null;
-          r.dragFrom = null;
-          r.tip = null;
-          r.behavior = 'resting';
-          r.until = clock + 1.5;
-        }
-      }
-      if (
-        r.tether &&
-        distanceToSegment(point, r.tether, r.behavior === 'descending' ? r : r.landing) < 24
-      ) {
-        r.tether = null;
-        removed = true;
-      }
-      if (r.dragFrom && distanceToSegment(point, r.dragFrom, r) < 24) {
-        r.dragFrom = null;
-        removed = true;
-      }
-    });
-    if (
-      !options.roam &&
-      surfaces.some(
-        (s) =>
-          Math.hypot(point.x - win.scrollX - s.anchor.x, point.y - win.scrollY - s.anchor.y) <
-          s.span,
-      )
-    ) {
-      silkCleared = true;
-      removed = true;
-    }
-    if (removed) schedule();
-    return removed;
-  }
-  const eraseDown = (event: PointerEvent): void => {
-    if (!event.shiftKey || event.button !== 0 || state === 'destroyed') return;
-    erasing = true;
-    pointer = null;
-    if (eraseAt({ x: event.clientX + win.scrollX, y: event.clientY + win.scrollY })) {
-      suppressClick = true;
-      suppressUntil = win.performance.now() + 700;
-      event.preventDefault();
-    }
-  };
-  const eraseMove = (event: PointerEvent): void => {
-    if (erasing && event.shiftKey && event.buttons & 1) {
-      pointer = null;
-      if (eraseAt({ x: event.clientX + win.scrollX, y: event.clientY + win.scrollY })) {
-        suppressClick = true;
-        suppressUntil = win.performance.now() + 700;
-        event.preventDefault();
-      }
-    }
-  };
-  const eraseUp = (): void => {
-    erasing = false;
-  };
-  const eraseClick = (event: MouseEvent): void => {
-    if (suppressClick && win.performance.now() < suppressUntil) {
-      event.preventDefault();
-      event.stopImmediatePropagation();
-    }
-    suppressClick = false;
-  };
-  doc.addEventListener('pointerdown', eraseDown, { capture: true, passive: false });
-  doc.addEventListener('pointermove', eraseMove, { capture: true, passive: false });
-  doc.addEventListener('pointerup', eraseUp, true);
-  doc.addEventListener('pointercancel', eraseUp, true);
-  doc.addEventListener('click', eraseClick, true);
-  cleanup.push(() => {
-    doc.removeEventListener('pointerdown', eraseDown, true);
-    doc.removeEventListener('pointermove', eraseMove, true);
-    doc.removeEventListener('pointerup', eraseUp, true);
-    doc.removeEventListener('pointercancel', eraseUp, true);
-    doc.removeEventListener('click', eraseClick, true);
-  });
   listen(win, 'resize', invalidate);
   listen(doc, 'scroll', invalidate, true);
   listen(doc, 'pointermove', (event) => {
-    if (state !== 'running' || reduced || erasing) return;
+    if (state !== 'running' || reduced) return;
     const e = event as PointerEvent;
     pointer = { x: e.clientX, y: e.clientY };
     pointerUntil = e.pointerType === 'touch' ? win.performance.now() + 900 : Infinity;
   });
   listen(doc, 'pointerdown', (event) => {
-    if (state !== 'running' || reduced || erasing) return;
+    if (state !== 'running' || reduced) return;
     const e = event as PointerEvent;
     pointer = { x: e.clientX, y: e.clientY };
     pointerUntil = win.performance.now() + 900;
@@ -590,8 +469,6 @@ export function createSpider(input: SpiderOptions = {}): SpiderController {
     pointer = null;
   });
   listen(win, 'blur', () => {
-    erasing = false;
-    suppressClick = false;
     pointer = null;
   });
   listen(doc, 'visibilitychange', () => {
@@ -619,7 +496,15 @@ export function createSpider(input: SpiderOptions = {}): SpiderController {
   });
   if (options.observe) {
     const mutation = new MutationObserver((records) => {
-      if (records.some((r) => r.target !== canvas && !canvas.contains(r.target))) invalidate();
+      if (
+        records.some((r) => {
+          const el = r.target.nodeType === 1 ? (r.target as Element) : r.target.parentElement;
+          return (
+            r.target !== canvas && !canvas.contains(r.target) && !el?.closest('[data-spider-ui]')
+          );
+        })
+      )
+        invalidate();
     });
     mutation.observe(root === doc ? doc.documentElement : root, {
       subtree: true,
@@ -638,6 +523,9 @@ export function createSpider(input: SpiderOptions = {}): SpiderController {
     resizeObserver = new ResizeObserver(invalidate);
     cleanup.push(() => resizeObserver?.disconnect());
   }
+  void doc.fonts.ready.then(() => {
+    if (state !== 'destroyed') invalidate();
+  });
   state = 'running';
   measure();
   draw(0);

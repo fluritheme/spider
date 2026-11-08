@@ -20,7 +20,7 @@ A tiny jumping spider that explores your page, spins delicate silk, blinks, star
 
 - **A whole document to explore.** It walks beyond its web, rests, weaves, and takes shelter behind cards and other objects. Scrolling moves the spider and its silk with the document.
 - **A carefully drawn jumping spider.** Eight articulated legs, alternating footfalls, fine fuzz, sand-colored markings, glossy eyes, and a quiet blink. Its palette stays stable as it crosses light and dark content; a fine outline provides contrast.
-- **Silk it actually makes.** The spider descends on a thread, attaches to real letter and object edges, traverses support cables, then stitches curved cross-threads. Roaming mode never spawns a complete net. Finished sections stay until erased or the bounded history fills.
+- **Silk it actually makes.** The spider descends on a thread, attaches to real letter and object edges, traverses support cables, then stitches curved cross-threads. Roaming mode never spawns a complete net. Finished sections stay until cleared or the bounded history fills.
 - **Aware of layers.** Web anchors follow DOM geometry; hiding uses rounded object silhouettes, including ordinary nested 2D transforms. The optional hanging mode also clips corner-web visibility using browser hit-testing.
 - **A good guest.** Zero runtime dependencies, no CSS imports, no network requests, no telemetry, and no changes to your elements' styles or markup.
 - **Ready for real websites.** Touch reactions, responsive webs, reduced-motion support, high-DPI rendering with a bounded backing store, SSR-safe imports, and complete cleanup.
@@ -31,13 +31,13 @@ A tiny jumping spider that explores your page, spins delicate silk, blinks, star
 
 ![Spider weaving around the live page heading](https://raw.githubusercontent.com/fluritheme/spider/main/assets/readme/woven-page.png)
 
-**The playground — real canvas rendering, real DOM elements.**
+**The live habitat — actual silk woven across oversized lettering.**
 
-![Spider playground with delicately woven cards and customization controls](https://raw.githubusercontent.com/fluritheme/spider/main/assets/readme/playground.png)
+![Spider exploring a cobalt habitat with silk between the actual letters](https://raw.githubusercontent.com/fluritheme/spider/main/assets/readme/playground.png)
 
 **A closer look — the original procedural jumping-spider design.**
 
-![Detailed jumping spider with articulated striped legs and glossy eyes on light and dark surfaces](https://raw.githubusercontent.com/fluritheme/spider/main/assets/readme/character.png)
+![Original jumping spider with a stable palette on cobalt and charcoal surfaces](https://raw.githubusercontent.com/fluritheme/spider/main/assets/readme/character.png)
 
 **Small screens, thoughtfully handled.**
 
@@ -73,7 +73,7 @@ No required stylesheet, wrapper, asset download, or framework adapter. The packa
 ```html
 <article data-spider-web="top-left">Hello, little friend.</article>
 <script type="module">
-  import { createSpider } from 'https://cdn.jsdelivr.net/npm/@fluritheme/spider@0.1.0/dist/index.js';
+  import { createSpider } from 'https://cdn.jsdelivr.net/npm/@fluritheme/spider@0.1.1/dist/index.js';
   const spider = createSpider();
 </script>
 ```
@@ -159,38 +159,40 @@ const spider = createSpider({ roam: false });
 
 | Attribute            | Purpose                                                                                                                                     |
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| `data-spider-web`    | Attach a corner web. Optional value: `top-left`, `top-right`, `bottom-left`, `bottom-right`.                                                |
+| `data-spider-web`    | Offer edge anchors for weaving; choose a corner in hanging mode. Optional value: `top-left`, `top-right`, `bottom-left`, `bottom-right`.    |
 | `data-spider-object` | Treat this element as an object the spider can hide behind.                                                                                 |
-| `data-spider-text`   | Use this element's letter rectangles as silk attachment points, alongside `h1` and `h2`.                                                    |
+| `data-spider-text`   | Use this element's font-contour samples as silk attachment points, alongside `h1` and `h2`.                                                 |
 | `data-spider-ignore` | Exclude this element and its descendants from web selection, text silk, and shelter selection. It does not create a roaming exclusion zone. |
 
 Without explicit `targets`, the library uses `[data-spider-web]` elements. If none exist, it falls back to a bounded set of `article`, `aside`, and `section` elements. A bare page still gets a roaming spider. Rich webs need enough non-collinear letter or object anchors.
 
-Webs use the first `maxWebs` selected elements in document order, including offscreen targets. Add explicit attributes or selectors for large pages. Heading silk is limited to the first four headings/marked text elements and 48 letters per heading, with two edge anchors per letter. No text nodes are wrapped, split, or replaced.
+Webs use the first `maxWebs` selected elements in document order, including offscreen targets. Add explicit attributes or selectors for large pages. Heading silk is limited to the first four headings/marked text elements and 48 letters per heading, with several ink-contour samples per letter. No text nodes are wrapped, split, or replaced.
 
 ## Options
 
 All options are optional. Values outside the documented bounds throw before installing the effect.
 
-| Option       | Default    | Description                                                                                                                                 |
-| ------------ | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| `root`       | `document` | Current document or an `HTMLElement` in it. Scopes web and heading discovery.                                                               |
-| `targets`    | automatic  | CSS selector or readonly array of elements for corner webs.                                                                                 |
-| `roam`       | `true`     | Explore, weave short trails, and hide. `false` hangs from a web.                                                                            |
-| `territory`  | `'page'`   | `'page'` explores the visible viewport; `'root'` uses the root element's visible rectangle.                                                 |
-| `objects`    | see below  | Selector for shelter objects, selected from the current document.                                                                           |
-| `maxWebs`    | `6`        | Integer, 1–24.                                                                                                                              |
-| `spiders`    | `1`        | Integer, 1–8. Hanging mode also needs enough visible web targets.                                                                           |
-| `webSize`    | `112`      | 40–240 CSS px. Controls the preferred woven pocket size; hanging-mode corner webs are also capped by their element.                         |
-| `size`       | `1`        | Spider scale, 0.5–2.                                                                                                                        |
-| `speed`      | `1`        | Movement and behavior speed, 0.25–3.                                                                                                        |
-| `fearRadius` | `110`      | 0–300 CSS px; `0` disables pointer fear.                                                                                                    |
-| `color`      | `'auto'`   | A CSS color for silk and the spider's middle tones. Auto keeps a fixed sable spider palette and adapts corner silk to each host background. |
-| `webOpacity` | `0.4`      | Silk opacity, 0–1. `0` removes decorative silk while keeping the spider.                                                                    |
-| `zIndex`     | `100`      | Canvas stacking level, signed 32-bit integer. Native top-layer dialogs stay above it.                                                       |
-| `motion`     | `'system'` | `'system'`, `'full'`, or `'none'`. System follows `prefers-reduced-motion`, including changes while mounted.                                |
-| `weave`      | `true`     | Progressive decorative corner webs in hanging mode. Roaming always physically lays its strands, even when false.                            |
-| `observe`    | `true`     | Observe DOM/element changes and periodically refresh moving geometry while animating.                                                       |
+| Option       | Default    | Description                                                                                                         |
+| ------------ | ---------- | ------------------------------------------------------------------------------------------------------------------- |
+| `root`       | `document` | Current document or an HTMLElement in it; scopes web/heading discovery.                                             |
+| `targets`    | automatic  | Selector or readonly array of HTML elements that provide object-edge anchors.                                       |
+| `roam`       | `true`     | Explore, physically weave, and hide. `false` selects optional decorative hanging mode.                              |
+| `entrance`   | `'silk'`   | Descend on a thread, or `'appear'` immediately. Reduced motion skips the descent.                                   |
+| `territory`  | `'page'`   | Whole document, or `'root'` for the supplied root element's rectangle.                                              |
+| `objects`    | see below  | Selector for shelter objects in the current document.                                                               |
+| `maxWebs`    | `6`        | Maximum selected object targets, including offscreen ones. Integer 1–24.                                            |
+| `spiders`    | `1`        | Resident count, integer 1–8. Hanging mode also needs visible targets.                                               |
+| `webSize`    | `112`      | Preferred woven span in CSS pixels, 40–240. Hanging corners also fit their element.                                 |
+| `webDensity` | `0.7`      | Cross-thread density for future construction groups, 0–1.                                                           |
+| `size`       | `1`        | Spider scale, 0.5–2.                                                                                                |
+| `speed`      | `1`        | Movement and behavior speed, 0.25–3.                                                                                |
+| `fearRadius` | `110`      | Pointer fear radius in CSS pixels, 0–300. Zero disables fear.                                                       |
+| `color`      | `'auto'`   | CSS color for new silk and body middle tones. Auto adapts silk to hosts and keeps the spider's sable palette fixed. |
+| `webOpacity` | `0.4`      | Silk opacity, 0–1. Zero hides silk while keeping the spider.                                                        |
+| `zIndex`     | `100`      | Canvas stacking level, signed 32-bit integer. Browser top-layer dialogs remain above it.                            |
+| `motion`     | `'system'` | Follow reduced-motion preferences, or choose `'full'` / `'none'`. Changes to system preference apply live.          |
+| `weave`      | `true`     | Animate decorative webs in hanging mode. Roaming always physically traverses its new silk.                          |
+| `observe`    | `true`     | Observe DOM/element changes and periodically refresh moving geometry while animating.                               |
 
 The default `objects` selector is:
 
@@ -213,7 +215,7 @@ spider.update({ size: 1.2, webOpacity: 0.5 }); // Keep existing webs.
 spider.destroy(); // Cancel frames, remove listeners/observers, and remove the canvas.
 ```
 
-**Erase a whole woven section:** hold **Shift + the primary mouse button**, then sweep across its silk. A 24px brush removes the whole construction group, rather than cutting a few pixels. Ordinary clicks pass through; only a successful Shift erasure suppresses its associated click. Touch users can call `clearWebs()` from a normal button, as the demo does.
+Webs stay in place when clicked or dragged, including with Shift held. Use `clearWebs()` to remove silk explicitly, or connect it to a button as the demo does.
 
 `getState()` returns a state (`running`, `paused`, `destroyed`, or SSR `idle`), `reducedMotion`, the visible web-target count, and resident coordinates/visibility/behavior/laid-thread counts. Behavior is `descending`, `exploring`, `weaving`, `hiding`, `resting`, `fleeing`, or `hanging`. Roaming coordinates are CSS pixels in the document; subtract `scrollX`/`scrollY` for viewport coordinates. Hanging-mode coordinates are viewport-relative. `visible` describes whether the resident's center is onscreen and unoccluded; a few legs may still peek out.
 
@@ -229,8 +231,8 @@ This is decorative geometry, not a complete CSS compositor:
 
 - Corner webs use axis-aligned bounding rectangles. Rotated card boundaries are sampled; large rotations, perspective, irregular `clip-path`, transparent cutouts, masks, and asymmetric/percentage corner radii are approximated.
 - Shelter silhouettes handle affine 2D transforms, but not perspective, per-pixel image transparency, or every nested overflow combination. Overlapping shelters are clipped as a union.
-- Pointer-transparent foreground layers are not fully represented by browser hit-testing. Shadow DOM interiors, cross-document iframes, canvas contents, and individual glyph outlines are not traversed.
-- Heading attachments use letter rectangles, not exact font outlines. Roaming woven strands are foreground silk; the hanging-mode corner-web occlusion mask does not apply to them. Decorative silk can cross text.
+- Pointer-transparent foreground layers are not fully represented by browser hit-testing. Shadow DOM interiors, cross-document iframes, canvas contents, and arbitrary graphics inside them are not traversed.
+- Heading attachments combine text ranges and a small cached raster mask of the actual font. Contours are approximated; complex shaping, emoji, rotated text, and variable font details can need explicit element anchors. Roaming woven strands are foreground silk; the hanging-mode corner-web occlusion mask does not apply to them. Decorative silk can cross text.
 - Auto web contrast samples the nearest mostly opaque ancestor background. Image/gradient backgrounds and translucent compositing can need an explicit `color`.
 - The resident and silk stay in document space. Scrolling can take the spider out of view; it is not teleported back to the viewport. Shelter discovery is limited to currently visible objects, so offscreen hiding is approximate.
 - For correct fixed positioning, avoid a transformed/filter-containing `body` or `html`. Use `zIndex` to keep your app's custom dialogs above the effect.

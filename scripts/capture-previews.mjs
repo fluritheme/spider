@@ -5,80 +5,90 @@ const output = new URL('../assets/readme/', import.meta.url);
 await mkdir(output, { recursive: true });
 const browser = await chromium.launch();
 try {
-  const page = await browser.newPage({
-    viewport: { width: 1440, height: 1100 },
-    deviceScaleFactor: 1,
-  });
-  await page.goto('http://127.0.0.1:5198');
-  await page.waitForTimeout(22000);
-  await page.screenshot({ path: new URL('woven-page.png', output).pathname });
-  await page.locator('#playground').scrollIntoViewIfNeeded();
-  await page.locator('#reset').click();
-  await page.waitForTimeout(16000);
-  await page
-    .locator('#playground')
-    .screenshot({ path: new URL('playground.png', output).pathname });
-  await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto('http://127.0.0.1:5198');
-  await page.waitForTimeout(20000);
-  await page.screenshot({ path: new URL('mobile.png', output).pathname });
-  // Draw directly with the production painter so the character detail preview uses identical geometry.
-  await page.setViewportSize({ width: 1000, height: 390 });
-  await page.goto('http://127.0.0.1:5198/preview.html');
-  await page.evaluate(async () => {
-    window.spider.destroy();
-    const paintSpider = window.paintSpider;
-    document.body.replaceChildren();
-    const canvas = document.createElement('canvas');
-    canvas.width = 1000;
-    canvas.height = 390;
-    document.body.append(canvas);
-    const ctx = canvas.getContext('2d');
-    ctx.fillStyle = '#f5f2eb';
-    ctx.fillRect(0, 0, 500, 390);
-    ctx.fillStyle = '#302d34';
-    ctx.fillRect(500, 0, 500, 390);
-    for (const x of [250, 750])
-      paintSpider(ctx, { x, y: 180 }, null, '#6c5140', 4, 1, null, 0, true);
-    ctx.textAlign = 'center';
-    ctx.font = '12px DM, system-ui';
-    ctx.fillStyle = '#8a7c6d';
-    ctx.fillText('ONE LITTLE SPIDER.', 250, 331);
-    ctx.fillStyle = '#d7c7b2';
-    ctx.fillText('THE SAME COLORS. EVERYWHERE.', 750, 331);
-  });
-  await page.screenshot({ path: new URL('character.png', output).pathname });
-  await page.close();
+  // Capture the actual public demo: no pre-seeded webs or substitute artwork.
   const context = await browser.newContext({
-    viewport: { width: 900, height: 540 },
+    viewport: { width: 1080, height: 900 },
     deviceScaleFactor: 1,
-    recordVideo: { dir: 'preview-recordings', size: { width: 900, height: 540 } },
+    reducedMotion: 'no-preference',
+    recordVideo: { dir: 'preview-recordings', size: { width: 1080, height: 900 } },
   });
   const animated = await context.newPage();
-  await animated.goto('http://127.0.0.1:5198/preview.html');
-  await animated.waitForTimeout(18000);
-  await animated
-    .screenshot({ path: new URL('../demo/public/social.png', import.meta.url).pathname })
-    .catch(() => {});
+  await animated.goto('http://127.0.0.1:5198');
+  await animated.waitForTimeout(30000);
   const video = animated.video();
   await context.close();
-  const videoPath = await video.path();
   execFileSync(
     'ffmpeg',
     [
       '-y',
       '-i',
-      videoPath,
+      await video.path(),
       '-vf',
-      'fps=15,scale=900:-1:flags=lanczos,split[s0][s1];[s0]palettegen=max_colors=192[p];[s1][p]paletteuse=dither=bayer:bayer_scale=3',
+      'fps=12,scale=900:-1:flags=lanczos,split[s0][s1];[s0]palettegen=max_colors=160[p];[s1][p]paletteuse=dither=bayer:bayer_scale=4',
       '-loop',
       '0',
       new URL('spider.gif', output).pathname,
     ],
     { stdio: 'ignore' },
   );
+  const page = await browser.newPage({
+    viewport: { width: 1440, height: 1080 },
+    deviceScaleFactor: 1,
+    reducedMotion: 'no-preference',
+  });
+  await page.goto('http://127.0.0.1:5198');
+  await page.waitForFunction(
+    () =>
+      Number(document.querySelector('#thread-count')?.textContent) >= 18 &&
+      document.querySelector('#activity')?.textContent?.includes('WEAVING'),
+    null,
+    { timeout: 45000 },
+  );
+  await page
+    .locator('#playground')
+    .screenshot({ path: new URL('playground.png', output).pathname });
+  await page.screenshot({
+    path: new URL('woven-page.png', output).pathname,
+    clip: { x: 0, y: 110, width: 1440, height: 650 },
+  });
+  await page.setViewportSize({ width: 1200, height: 900 });
+  await page.waitForTimeout(300);
+  await page.screenshot({
+    path: new URL('../demo/public/social.png', import.meta.url).pathname,
+    clip: { x: 0, y: 0, width: 1200, height: 630 },
+  });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('http://127.0.0.1:5198');
+  await page.waitForTimeout(25000);
+  await page.screenshot({ path: new URL('mobile.png', output).pathname });
+  // The character study also uses the production vector painter.
+  await page.setViewportSize({ width: 1200, height: 440 });
+  await page.goto('http://127.0.0.1:5198/preview.html');
+  await page.evaluate(() => {
+    window.spider.destroy();
+    document.body.replaceChildren();
+    const canvas = document.createElement('canvas');
+    canvas.width = 1200;
+    canvas.height = 440;
+    document.body.append(canvas);
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#1719df';
+    ctx.fillRect(0, 0, 600, 440);
+    ctx.fillStyle = '#111210';
+    ctx.fillRect(600, 0, 600, 440);
+    for (const x of [300, 900])
+      window.paintSpider(ctx, { x, y: 206 }, null, '#6c5140', 4, 1, null, 0, true);
+    ctx.font = '11px DM,Arial';
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#f2f2e9';
+    ctx.fillText('ONE LITTLE RESIDENT.', 300, 373);
+    ctx.fillStyle = '#d8ff54';
+    ctx.fillText('THE SAME PALETTE. EVERYWHERE.', 900, 373);
+  });
+  await page.screenshot({ path: new URL('character.png', output).pathname });
+  await page.close();
   console.log(
-    'Captured playground, phone, character, and animated runtime previews in assets/readme/.',
+    'Captured 30s of actual weaving, the working habitat, a close web study, mobile, the original character, and the social card.',
   );
 } finally {
   await browser.close();

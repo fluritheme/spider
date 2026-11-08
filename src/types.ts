@@ -16,7 +16,7 @@ export interface SpiderOptions {
   webDensity?: number;
   /** Explore the document, weave nets, and hide behind real elements. Default true. */
   roam?: boolean;
-  /** Roaming area: whole document (default) or the supplied root's visible rectangle. */
+  /** Roaming area: whole document (default) or the supplied root's rectangle. */
   territory?: 'page' | 'root';
   /** CSS selector for objects the spider can shelter behind. */
   objects?: string;

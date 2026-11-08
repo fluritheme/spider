@@ -5,6 +5,29 @@ export interface PageObject {
   path: Path2D;
   center: Point;
 }
+export function elementMatrix(element: HTMLElement, win: Window): DOMMatrix {
+  const r = element.getBoundingClientRect(),
+    center = { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+  let matrix = new DOMMatrix(),
+    ancestor: Element | null = element;
+  while (ancestor) {
+    const transform = win.getComputedStyle(ancestor).transform;
+    if (transform !== 'none') {
+      const m = new DOMMatrix(transform);
+      if (!m.is2D) {
+        matrix = new DOMMatrix();
+        break;
+      }
+      matrix = new DOMMatrix([m.a, m.b, m.c, m.d, 0, 0]).multiply(matrix);
+    }
+    ancestor = ancestor.parentElement;
+  }
+  const width = element.offsetWidth || r.width,
+    height = element.offsetHeight || r.height;
+  matrix.e = center.x - (matrix.a * width) / 2 - (matrix.c * height) / 2;
+  matrix.f = center.y - (matrix.b * width) / 2 - (matrix.d * height) / 2;
+  return matrix;
+}
 /** Cache geometry, including 2D rotations inherited through nested stacking contexts. */
 export function pageObjects(doc: Document, win: Window, selector: string): PageObject[] {
   return [...doc.querySelectorAll<HTMLElement>(selector)].slice(0, 100).flatMap((element) => {
@@ -25,25 +48,9 @@ export function pageObjects(doc: Document, win: Window, selector: string): PageO
       return [];
     const box = { x: r.left, y: r.top, width: r.width, height: r.height };
     const center = { x: r.left + r.width / 2, y: r.top + r.height / 2 };
-    let matrix = new DOMMatrix();
-    let ancestor: Element | null = element;
-    while (ancestor) {
-      const transform = win.getComputedStyle(ancestor).transform;
-      if (transform !== 'none') {
-        const m = new DOMMatrix(transform);
-        // Perspective is deliberately approximated by the browser's bounding rectangle.
-        if (!m.is2D) {
-          matrix = new DOMMatrix();
-          break;
-        }
-        matrix = new DOMMatrix([m.a, m.b, m.c, m.d, 0, 0]).multiply(matrix);
-      }
-      ancestor = ancestor.parentElement;
-    }
+    const matrix = elementMatrix(element, win);
     const width = element.offsetWidth || r.width,
       height = element.offsetHeight || r.height;
-    matrix.e = center.x - (matrix.a * width) / 2 - (matrix.c * height) / 2;
-    matrix.f = center.y - (matrix.b * width) / 2 - (matrix.d * height) / 2;
     const local = new Path2D();
     const radius = Math.min(parseFloat(style.borderRadius) || 0, width / 2, height / 2);
     local.roundRect(0, 0, width, height, radius);

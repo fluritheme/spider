@@ -42,11 +42,15 @@ export interface Resident extends Point {
   landing: Point;
   ink: string;
   woven: number;
+  silkInk: string;
 }
 export function curvePoint(from: Point, to: Point, sag: number, t: number): Point {
   return {
     x: from.x + (to.x - from.x) * t,
-    y: from.y + (to.y - from.y) * t + 4 * sag * t * (1 - t),
+    y:
+      from.y +
+      (to.y - from.y) * t +
+      (sag * (Math.cosh(1.2) - Math.cosh(2.4 * (t - 0.5)))) / (Math.cosh(1.2) - 1),
   };
 }
 export function makeResident(point: Point, index: number, descend = false, top = 0): Resident {
@@ -73,9 +77,10 @@ export function makeResident(point: Point, index: number, descend = false, top =
     nextAttachment: null,
     route: 0,
     tether: descend ? { x: point.x, y: top } : null,
-    landing: { ...point },
+    landing: point,
     ink: '#6c5140',
     woven: 0,
+    silkInk: 'ink' in point ? (point as SilkAnchor).ink : '#8d8172',
   };
 }
 const task = (from: Point, to: Point, sag: number, lay = true): Task => ({
@@ -86,7 +91,13 @@ const task = (from: Point, to: Point, sag: number, lay = true): Task => ({
   length: Math.hypot(to.x - from.x, to.y - from.y) + Math.abs(sag) * 0.5,
 });
 /** An uninterrupted itinerary: every visible strand is traversed by the spider, never pre-spawned. */
-function planWeb(r: Resident, anchors: readonly SilkAnchor[], density: number, span: number): void {
+function planWeb(
+  r: Resident,
+  anchors: readonly SilkAnchor[],
+  density: number,
+  span: number,
+  color: string,
+): void {
   const available = anchors.filter(
     (a) =>
       a.element.isConnected &&
@@ -95,26 +106,6 @@ function planWeb(r: Resident, anchors: readonly SilkAnchor[], density: number, s
   );
   available.sort((a, b) => Math.hypot(a.x - r.x, a.y - r.y) - Math.hypot(b.x - r.x, b.y - r.y));
   if (available.length < 2) return;
-  // Choose a small, well-supported pocket; different letter edges give naturally irregular shapes.
-  const a: Point =
-    r.tip && Math.hypot(r.tip.x - r.x, r.tip.y - r.y) < 8 ? r.tip : { x: r.x, y: r.y };
-  const b = available.find((p) => Math.hypot(p.x - a.x, p.y - a.y) > span * 0.85) ?? available[0]!;
-  const candidates = available.filter(
-    (p) => p.id !== b.id && Math.hypot(p.x - a.x, p.y - a.y) < span * 2.5,
-  );
-  const c =
-    candidates.find(
-      (p) => Math.abs((b.x - a.x) * (p.y - a.y) - (b.y - a.y) * (p.x - a.x)) > 1700,
-    ) ?? candidates.at(-1);
-  if (!c) return;
-  const abSag = Math.min(30, Math.hypot(b.x - a.x, b.y - a.y) * 0.12);
-  const acSag = Math.min(23, Math.hypot(c.x - a.x, c.y - a.y) * 0.09);
-  // Three foundation cables, then alternate between their edges to stitch a hanging sheet of silk.
-  r.tasks = [
-    task(a, b, abSag),
-    task(b, c, Math.min(38, Math.hypot(c.x - b.x, c.y - b.y) * 0.15)),
-    task(c, a, acSag),
-  ];
   const bound = (from: Point, to: Point, sag: number, t: number): Point => ({
     get x() {
       return curvePoint(from, to, sag, t).x;
@@ -123,33 +114,113 @@ function planWeb(r: Resident, anchors: readonly SilkAnchor[], density: number, s
       return curvePoint(from, to, sag, t).y;
     },
   });
+  const origin: Point =
+    r.tip && Math.hypot(r.tip.x - r.x, r.tip.y - r.y) < 8 ? r.tip : { x: r.x, y: r.y };
+  const closest = available[0]!;
+  const local = anchors.filter(
+    (p) =>
+      p.element === closest.element &&
+      p.glyph !== undefined &&
+      p.box &&
+      closest.box &&
+      Math.abs(p.box.y - closest.box.y) < closest.box.height * 0.45,
+  );
+  const sameGlyph = local.filter((p) => p.glyph === closest.glyph);
+  let a: Point = origin,
+    b: Point,
+    c: Point,
+    d: Point;
+  if (sameGlyph.length >= 2) {
+    const upper =
+      sameGlyph.filter((p) => p.side === 'top').sort((a, b) => a.y - b.y)[0] ?? sameGlyph[0]!;
+    const lower =
+      sameGlyph.filter((p) => p.side === 'bottom').sort((a, b) => b.y - a.y)[0] ??
+      sameGlyph.at(-1)!;
+    const partners = local.filter(
+      (p) =>
+        p.side === 'top' &&
+        p.glyph !== upper.glyph &&
+        Math.abs(p.x - upper.x) > span * 0.6 &&
+        Math.abs(p.x - upper.x) < span * 3.5,
+    );
+    const partner =
+      partners.sort(
+        (a, b) =>
+          Math.abs(Math.abs(a.x - upper.x) - span * 1.4) -
+          Math.abs(Math.abs(b.x - upper.x) - span * 1.4),
+      )[r.woven % Math.min(3, partners.length)] ?? partners[0];
+    if (!partner) return;
+    a = upper;
+    b = partner;
+    c =
+      local
+        .filter((p) => p.glyph === partner.glyph && p.side === 'bottom')
+        .sort((a, b) => b.y - a.y)[0] ?? partner;
+    d = lower;
+  } else {
+    b = available.find((p) => Math.hypot(p.x - a.x, p.y - a.y) > span * 0.8) ?? available[0]!;
+    c =
+      available.find(
+        (p) => Math.abs((b.x - a.x) * (p.y - a.y) - (b.y - a.y) * (p.x - a.x)) > 2500,
+      ) ?? available.at(-1)!;
+    d = { x: a.x + (c.x - a.x) * 0.2, y: a.y + (c.y - a.y) * 0.8 };
+  }
+  r.silkInk = color === 'auto' ? closest.ink : color;
+  const topSag = Math.min(70, Math.hypot(b.x - a.x, b.y - a.y) * (0.12 + (r.woven % 3) * 0.025));
+  const bottomSag = Math.min(55, Math.hypot(c.x - d.x, c.y - d.y) * 0.14);
+  const leftSag = Math.min(12, Math.hypot(d.x - a.x, d.y - a.y) * 0.1),
+    rightSag = Math.min(12, Math.hypot(c.x - b.x, c.y - b.y) * 0.1);
+  r.tasks = [];
+  if (Math.hypot(origin.x - a.x, origin.y - a.y) > 3)
+    r.tasks.push(task(origin, a, Math.min(22, Math.hypot(origin.x - a.x, origin.y - a.y) * 0.08)));
+  // A hanging sheet between real letter contours, with loose support cables above and below.
+  r.tasks.push(
+    task(a, b, topSag),
+    task(b, c, rightSag),
+    task(c, d, bottomSag),
+    task(d, a, leftSag),
+  );
   let last: Point = a;
-  const rows = Math.round(5 + density * 8);
+  const rows = Math.round(6 + density * 9);
+  const rowCurves: { from: Point; to: Point; sag: number }[] = [];
   for (let row = 1; row <= rows; row++) {
-    const t = row / (rows + 1);
-    const onB = bound(a, b, abSag, clamp(t + Math.sin(row * 2.3) * 0.028, 0, 1));
-    const onC = bound(a, c, acSag, clamp(t + Math.cos(row * 1.7) * 0.038, 0, 1));
-    const first = row % 2 ? onB : onC,
-      second = row % 2 ? onC : onB;
-    r.tasks.push(task(last, first, 0, false));
-    const distance = Math.hypot(first.x - second.x, first.y - second.y);
-    r.tasks.push(task(first, second, Math.min(35, distance * (0.14 + Math.sin(row * 3.4) * 0.04))));
-    // A short branching repair every few rows makes small irregular junctions instead of a perfect grid.
-    if (row % 3 === 0) {
-      const junction = curvePoint(first, second, distance * 0.15, 0.46);
-      const next = curvePoint(
-        a,
-        row % 2 ? b : c,
-        row % 2 ? abSag : acSag,
-        Math.min(0.98, t + 0.12),
-      );
+    const t = Math.pow(row / (rows + 1), 0.86);
+    const left = bound(a, d, leftSag, clamp(t + Math.sin(row * 2.1 + r.woven) * 0.025, 0, 1));
+    const right = bound(b, c, rightSag, clamp(t + Math.cos(row * 1.7 + r.woven) * 0.038, 0, 1));
+    const from = row % 2 ? left : right,
+      to = row % 2 ? right : left;
+    r.tasks.push(task(last, from, 0, false));
+    const distance = Math.hypot(to.x - from.x, to.y - from.y);
+    const sag =
+      topSag * (1 - t) + bottomSag * t + Math.sin(row * 2.3) * Math.min(8, distance * 0.025);
+    r.tasks.push(task(from, to, sag));
+    rowCurves.push({ from, to, sag });
+    if (row > 1) {
+      const prior = rowCurves[row - 2]!,
+        fraction = 0.2 + (row % 4) * 0.17;
+      const joint = bound(from, to, sag, fraction),
+        other = bound(
+          prior.from,
+          prior.to,
+          prior.sag,
+          row % 2 ? 1 - fraction + 0.04 : 1 - fraction - 0.03,
+        );
       r.tasks.push(
-        task(second, junction, 0, false),
-        task(junction, next, Math.min(12, distance * 0.06)),
-        task(next, second, 0, false),
+        task(to, joint, 0, false),
+        task(joint, other, Math.min(10, distance * 0.025)),
+        task(other, to, 0, false),
       );
     }
-    last = second;
+    last = to;
+  }
+  // A few diagonally tensioned ties connect the sheets without forming a regular repeating grid.
+  for (let i = 1; i < rowCurves.length - 2; i += 3) {
+    const first = rowCurves[i]!,
+      second = rowCurves[i + 2]!;
+    const p = bound(first.from, first.to, first.sag, 0.27),
+      q = bound(second.from, second.to, second.sag, 0.58);
+    r.tasks.push(task(last, p, 0, false), task(p, q, 4));
+    last = q;
   }
   r.woven++;
   r.behavior = 'weaving';
@@ -160,11 +231,9 @@ function moveHeading(r: Resident, dx: number, dy: number, dt: number): void {
   r.angle += turn * (1 - Math.exp(-dt * 10));
 }
 function cancelWeave(r: Resident): void {
-  if (r.activeThread) {
-    r.activeThread.to = { x: r.x, y: r.y };
-    r.activeThread.sag *= r.activeThread.laid * r.activeThread.laid;
-    r.activeThread.laid = 1;
-  }
+  // Freeze the exact laid fraction. Startling the resident never reshapes old silk.
+  r.dragFrom = { x: r.x, y: r.y };
+  r.tip = null;
   r.task = null;
   r.activeThread = null;
   r.tasks = [];
@@ -219,6 +288,7 @@ export function stepResident(
   anchors: readonly SilkAnchor[] = [],
   density = 0.7,
   span = 112,
+  color = 'auto',
 ): void {
   if (r.behavior === 'descending') {
     const dy = r.landing.y - r.y;
@@ -259,7 +329,7 @@ export function stepResident(
   }
   if (r.behavior === 'weaving' && !r.scared) {
     if (!r.task && !r.tasks.length && time >= r.until) {
-      if (r.woven === 0 || Math.random() < 0.65) planWeb(r, anchors, density, span);
+      if (r.woven === 0 || Math.random() < 0.65) planWeb(r, anchors, density, span, color);
       if (!r.tasks.length) {
         chooseDestination(r, box, objects, anchors, time);
       }
@@ -276,7 +346,7 @@ export function stepResident(
           sag: r.task.sag,
           laid: 0,
           born: time,
-          ink: '#6f6255',
+          ink: r.silkInk,
         };
         r.threads.push(r.activeThread);
         r.threads = r.threads.filter((t) => t.group > r.woven - 12);
