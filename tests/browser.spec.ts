@@ -306,31 +306,34 @@ async function startLoom(page: Page): Promise<void> {
 test('descends from silk and builds threads sequentially instead of spawning a net', async ({
   page,
 }) => {
+  await page.clock.install();
+  await page.clock.pauseAt(new Date());
   await startLoom(page);
   const first = await page.evaluate(() => window.spider.getState().spiders[0]!);
   expect(first.behavior).toBe('descending');
   expect(first.y).toBeLessThan(0);
   expect(first.threads).toBe(0);
-  await expect
-    .poll(() => page.evaluate(() => window.spider.getState().spiders[0]!.threads), {
-      timeout: 10000,
-    })
-    .toBeGreaterThan(4);
+  // Advance every animation frame instead of depending on the CI runner's frame rate.
+  await page.clock.runFor(10000);
+  expect(await page.evaluate(() => window.spider.getState().spiders[0]!.threads)).toBeGreaterThan(
+    4,
+  );
   await page.evaluate(() => window.spider.pause());
   const before = await page.evaluate(() => window.spider.getState().spiders[0]!);
   await page.evaluate(() => window.spider.update({ size: 1.4, webOpacity: 0.6 }));
-  await page.waitForTimeout(80);
+  await page.clock.runFor(80);
   expect((await page.evaluate(() => window.spider.getState().spiders[0]!)).threads).toBe(
     before.threads,
   );
 });
 test('scrolling preserves document position and completed silk', async ({ page }) => {
+  await page.clock.install();
+  await page.clock.pauseAt(new Date());
   await startLoom(page);
-  await expect
-    .poll(() => page.evaluate(() => window.spider.getState().spiders[0]!.threads), {
-      timeout: 10000,
-    })
-    .toBeGreaterThan(2);
+  await page.clock.runFor(10000);
+  expect(await page.evaluate(() => window.spider.getState().spiders[0]!.threads)).toBeGreaterThan(
+    2,
+  );
   await page.evaluate(() => window.spider.pause());
   const before = await page.evaluate(() => window.spider.getState().spiders[0]!);
   await page.evaluate(() => window.scrollTo(0, 180));
@@ -341,12 +344,14 @@ test('scrolling preserves document position and completed silk', async ({ page }
   expect(after.threads).toBe(before.threads);
 });
 test('clicks and Shift-drag preserve silk; clearWebs removes it explicitly', async ({ page }) => {
+  await page.clock.install();
+  await page.clock.pauseAt(new Date());
   await startLoom(page);
-  await expect
-    .poll(() => page.evaluate(() => window.spider.getState().spiders[0]!.threads), {
-      timeout: 10000,
-    })
-    .toBeGreaterThan(4);
+  // Advance every animation frame instead of depending on the CI runner's frame rate.
+  await page.clock.runFor(10000);
+  expect(await page.evaluate(() => window.spider.getState().spiders[0]!.threads)).toBeGreaterThan(
+    4,
+  );
   await page.evaluate(() => window.spider.pause());
   const point = { x: 180, y: 155 };
   const count = await page.evaluate(() => window.spider.getState().spiders[0]!.threads);
