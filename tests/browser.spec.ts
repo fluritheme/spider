@@ -303,6 +303,17 @@ async function startLoom(page: Page): Promise<void> {
     });
   });
 }
+async function weaveThreads(page: Page, minimum: number): Promise<void> {
+  // Stop at the required state: rendering a whole mature web is unrelated to these checks.
+  for (let simulated = 0; simulated < 10000; simulated += 250) {
+    if ((await page.evaluate(() => window.spider.getState().spiders[0]!.threads)) >= minimum)
+      return;
+    await page.clock.runFor(250);
+  }
+  expect(
+    await page.evaluate(() => window.spider.getState().spiders[0]!.threads),
+  ).toBeGreaterThanOrEqual(minimum);
+}
 test('descends from silk and builds threads sequentially instead of spawning a net', async ({
   page,
 }) => {
@@ -314,7 +325,7 @@ test('descends from silk and builds threads sequentially instead of spawning a n
   expect(first.y).toBeLessThan(0);
   expect(first.threads).toBe(0);
   // Advance every animation frame instead of depending on the CI runner's frame rate.
-  await page.clock.runFor(10000);
+  await weaveThreads(page, 5);
   expect(await page.evaluate(() => window.spider.getState().spiders[0]!.threads)).toBeGreaterThan(
     4,
   );
@@ -330,7 +341,7 @@ test('scrolling preserves document position and completed silk', async ({ page }
   await page.clock.install();
   await page.clock.pauseAt(new Date());
   await startLoom(page);
-  await page.clock.runFor(10000);
+  await weaveThreads(page, 5);
   expect(await page.evaluate(() => window.spider.getState().spiders[0]!.threads)).toBeGreaterThan(
     2,
   );
@@ -348,7 +359,7 @@ test('clicks and Shift-drag preserve silk; clearWebs removes it explicitly', asy
   await page.clock.pauseAt(new Date());
   await startLoom(page);
   // Advance every animation frame instead of depending on the CI runner's frame rate.
-  await page.clock.runFor(10000);
+  await weaveThreads(page, 5);
   expect(await page.evaluate(() => window.spider.getState().spiders[0]!.threads)).toBeGreaterThan(
     4,
   );
