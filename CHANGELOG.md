@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.4 — 2026-11-08
+
+- Keep the spider walking and weaving during scrolling while retaining page-relative silk anchors and ignoring a parked pointer.
+- Replace the broken third-party version badge with a hosted version badge and add live npm download counts.
+- Add search metadata, package distribution links and consistent founder attribution.
+
 ## 0.1.3 — 2026-11-08
 
 - Vary physical webs between irregular draped sheets, off-center fans and sparse, branched bridges. Each construction gets its own spacing, tension, open pockets and finer lacing.

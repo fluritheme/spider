@@ -1,0 +1,15 @@
+# Spider by Fluri Themes
+
+> Open-source TypeScript website spider animation. A jumping spider descends on white silk, roams the document, hides behind DOM content and physically builds persistent webs around page anchors.
+
+Creator: František Gejdoš (Frantisek Gejdos), founder of Fluri Themes. Biography: https://fluri.xyz/founder/
+
+- Demo and installation: https://spider.fluri.xyz/
+- npm: https://www.npmjs.com/package/@fluritheme/spider
+- Source and full API reference: https://github.com/fluritheme/spider
+- README: https://raw.githubusercontent.com/fluritheme/spider/main/README.md
+- Privacy: https://spider.fluri.xyz/privacy/
+- Fluri Themes: https://fluri.xyz/
+- Winter snowfall effect: https://winter.fluri.xyz/
+
+Install: npm install @fluritheme/spider. Import createSpider, start on the client after mounting, destroy on unmount. Runtime has no external dependencies or telemetry. Supports reduced motion, explicit targets and layered DOM occlusion; see README for supported geometry and limits. Scrolling keeps silk attached to the document while the resident continues moving.

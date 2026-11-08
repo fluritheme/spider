@@ -364,7 +364,7 @@ test('clicks and Shift-drag preserve silk; clearWebs removes it explicitly', asy
   expect(await page.evaluate(() => window.spider.getState().state)).toBe('paused');
 });
 
-test('scrolling a running resident does not drift or trigger fear from a parked pointer', async ({
+test('a running resident keeps moving during continuous scrolling without pointer fear', async ({
   page,
 }) => {
   await page.clock.install();
@@ -373,24 +373,24 @@ test('scrolling a running resident does not drift or trigger fear from a parked 
   await page.clock.runFor(6000);
   const before = await page.evaluate(() => window.spider.getState().spiders[0]!);
   await page.mouse.move(before.x + 2, before.y - (await page.evaluate(() => scrollY)));
-  await page.evaluate(() => {
-    scrollTo(0, 180);
-    document.dispatchEvent(new Event('scroll'));
-  });
-  await page.clock.runFor(120);
-  const after = await page.evaluate(() => window.spider.getState().spiders[0]!);
-  expect(after.x).toBe(before.x);
-  expect(after.y).toBe(before.y);
-  expect(after.threads).toBe(before.threads);
-  expect(after.scared).toBe(false);
-  await page.evaluate(() => {
-    scrollTo(0, 0);
-    document.dispatchEvent(new Event('scroll'));
-  });
-  await page.clock.runFor(120);
-  const back = await page.evaluate(() => window.spider.getState().spiders[0]!);
-  expect(back.x).toBe(before.x);
-  expect(back.y).toBe(before.y);
+  let distance = 0;
+  let previous = before;
+  for (let i = 0; i < 20; i++) {
+    await page.evaluate(
+      (y) => {
+        scrollTo(0, y);
+        document.dispatchEvent(new Event('scroll'));
+      },
+      i % 2 ? 0 : 180,
+    );
+    await page.clock.runFor(80);
+    const next = await page.evaluate(() => window.spider.getState().spiders[0]!);
+    distance += Math.hypot(next.x - previous.x, next.y - previous.y);
+    expect(next.scared).toBe(false);
+    expect(next.threads).toBeGreaterThanOrEqual(before.threads);
+    previous = next;
+  }
+  expect(distance).toBeGreaterThan(4);
 });
 
 test('silk anchor identities survive hidden elements and subsequent layout changes', async ({

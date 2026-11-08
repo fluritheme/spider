@@ -4,14 +4,26 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta name="theme-color" content="#b94323" />
-    <title>Spider by Fluri — let a little life in.</title>
+    <title>Spider by Fluri — Animated website spider &amp; realistic webs</title>
     <meta
       name="description"
       content="An expressive little spider that makes your website its home. Watch it descend, weave real silk between letters, explore, and hide behind your content."
     />
+    <meta name="author" content="František Gejdoš" />
+    <meta property="og:site_name" content="Spider by Fluri Themes" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Spider by Fluri — animated jumping spider and delicate silk in a Halloween habitat"
+    />
+    <meta name="twitter:image" content="https://spider.fluri.xyz/social.png" />
     <link rel="canonical" href="https://spider.fluri.xyz/" />
     <link rel="icon" href="/spider.svg" type="image/svg+xml" />
-    <meta property="og:title" content="Spider by Fluri — let a little life in." />
+    <meta
+      property="og:title"
+      content="Spider by Fluri — Animated website spider &amp; realistic webs"
+    />
     <meta property="og:description" content="Eight legs. Real silk. Your website is his now." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://spider.fluri.xyz/" />
@@ -19,6 +31,64 @@
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="preload" href="/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="/style.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://fluri.xyz/#organization",
+            "name": "Fluri Themes",
+            "url": "https://fluri.xyz/",
+            "logo": "https://fluri.xyz/brand-mark-384.png",
+            "founder": { "@id": "https://fluri.xyz/#founder" },
+            "sameAs": ["https://github.com/fluritheme"]
+          },
+          {
+            "@type": "Person",
+            "@id": "https://fluri.xyz/#founder",
+            "name": "František Gejdoš",
+            "alternateName": "Frantisek Gejdos",
+            "url": "https://fluri.xyz/founder/",
+            "image": "https://fluri.xyz/founder-1200.jpg",
+            "description": "Founder of Fluri Themes and creator of the open-source Winter and Spider website effects.",
+            "jobTitle": "Founder",
+            "worksFor": { "@id": "https://fluri.xyz/#organization" },
+            "sameAs": [
+              "https://www.instagram.com/gejdosfrantisek/",
+              "https://www.linkedin.com/in/gejdosfrantisek/"
+            ]
+          },
+          {
+            "@type": "SoftwareSourceCode",
+            "@id": "https://spider.fluri.xyz/#software",
+            "name": "Spider by Fluri",
+            "url": "https://spider.fluri.xyz/",
+            "description": "Animated jumping spider that explores a website, hides behind DOM objects and weaves persistent silk.",
+            "codeRepository": "https://github.com/fluritheme/spider",
+            "programmingLanguage": "TypeScript",
+            "license": "https://opensource.org/license/mit",
+            "author": { "@id": "https://fluri.xyz/#founder" },
+            "publisher": { "@id": "https://fluri.xyz/#organization" },
+            "downloadUrl": "https://www.npmjs.com/package/@fluritheme/spider",
+            "runtimePlatform": "Web browser"
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://spider.fluri.xyz/#website",
+            "name": "Spider by Fluri",
+            "url": "https://spider.fluri.xyz/",
+            "publisher": { "@id": "https://fluri.xyz/#organization" }
+          },
+          {
+            "@type": "WebPage",
+            "url": "https://spider.fluri.xyz/",
+            "name": "Spider by Fluri",
+            "mainEntity": { "@id": "https://spider.fluri.xyz/#software" }
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <section class="hero ember" id="playground" aria-labelledby="hero-title">
@@ -28,6 +98,7 @@
         >
         <nav aria-label="Main navigation">
           <a href="#details">The little details</a><a href="#install">Install ↗</a
+          ><a href="https://fluri.xyz/">All themes ↗</a
           ><a href="https://github.com/fluritheme/spider">GitHub ↗</a>
         </nav>
       </header>
@@ -289,6 +360,10 @@
       <div class="footer-bottom">
         <span>OPEN SOURCE. MADE WITH CARE.</span><span>© FLURI / 2026</span>
       </div>
+      <p>
+        Created by
+        <a href="https://fluri.xyz/founder/">František Gejdoš, founder of Fluri Themes</a>.
+      </p>
     </footer>
     <div id="toast" role="status" hidden>Copied.</div>
     <script type="module" src="/main.ts"></script>

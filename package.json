@@ -1,10 +1,14 @@
 {
   "name": "@fluritheme/spider",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "A tiny, expressive spider for your website. Delicate webs that follow DOM layers, blinking eyes, and playful pointer reactions.",
   "type": "module",
   "license": "MIT",
-  "author": "Frantisek Gejdos <fluritheme@gmail.com>",
+  "author": {
+    "name": "Franti\u0161ek Gejdo\u0161",
+    "url": "https://fluri.xyz/founder/",
+    "email": "fluritheme@gmail.com"
+  },
   "homepage": "https://spider.fluri.xyz/",
   "repository": {
     "type": "git",
@@ -25,7 +29,12 @@
     "typescript",
     "react",
     "vue",
-    "fluri"
+    "fluri",
+    "website-effects",
+    "jumping-spider",
+    "spider-animation",
+    "dom-aware",
+    "seasonal-effects"
   ],
   "sideEffects": false,
   "files": [
@@ -52,7 +61,7 @@
   "packageManager": "pnpm@10.33.2",
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
-    "build:site": "vite build",
+    "build:site": "node scripts/prepare-discovery.mjs && vite build",
     "dev": "vite --host 127.0.0.1 --port 5198",
     "preview": "vite preview --host 127.0.0.1 --port 4198",
     "typecheck": "tsc --noEmit",

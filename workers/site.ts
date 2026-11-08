@@ -1,3 +1,4 @@
+import { downloadsBadge } from './badges';
 import { growthStatistics, pageObservation, recordPageView } from './growth';
 import type { Database, Environment } from './types';
 
@@ -164,6 +165,7 @@ export default {
   ): Promise<Response> {
     const url = new URL(request.url);
     if (url.origin !== origin) return new Response('Not found', { status: 404 });
+    if (url.pathname === '/readme/npm-downloads.svg') return downloadsBadge(request);
     if (url.pathname.startsWith('/api/')) {
       try {
         return await api(request, env);

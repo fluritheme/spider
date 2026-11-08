@@ -6,7 +6,8 @@
 
 [Live habitat](https://spider.fluri.xyz/) · [npm](https://www.npmjs.com/package/@fluritheme/spider) · [Options](#options) · [Source](https://github.com/fluritheme/spider)
 
-[![npm version](https://img.shields.io/npm/v/@fluritheme/spider.svg?color=b94323)](https://www.npmjs.com/package/@fluritheme/spider)
+[![npm version](https://spider.fluri.xyz/readme/npm-version.svg)](https://www.npmjs.com/package/@fluritheme/spider)
+[![npm downloads in the last 30 days](https://spider.fluri.xyz/readme/npm-downloads.svg)](https://www.npmjs.com/package/@fluritheme/spider)
 [![MIT license](https://img.shields.io/badge/license-MIT-39271d.svg)](https://github.com/fluritheme/spider/blob/main/LICENSE)
 [![Quality](https://github.com/fluritheme/spider/actions/workflows/ci.yml/badge.svg)](https://github.com/fluritheme/spider/actions/workflows/ci.yml)
 
@@ -88,7 +89,7 @@ No required stylesheet, wrapper, asset download, or framework adapter. The packa
 ```html
 <article data-spider-web="top-left">Hello, little friend.</article>
 <script type="module">
-  import { createSpider } from 'https://cdn.jsdelivr.net/npm/@fluritheme/spider@0.1.2/dist/index.js';
+  import { createSpider } from 'https://cdn.jsdelivr.net/npm/@fluritheme/spider@0.1.4/dist/index.js';
   const spider = createSpider();
 </script>
 ```
@@ -153,7 +154,7 @@ const spider = createSpider({
 });
 ```
 
-`targets` controls where webs attach. **It does not confine the roaming spider.** By default, roaming covers the document. Its coordinates stay attached to the page as you scroll; it does not follow the screen.
+`targets` controls where webs attach. **It does not confine the roaming spider.** By default, roaming covers the document. Its coordinates stay attached to the page as you scroll; it keeps walking and weaving during scrolling without following the screen.
 
 To keep it in a specific area:
 
@@ -279,4 +280,10 @@ Install test browsers once with `pnpm exec playwright install --with-deps chromi
 
 ## License
 
-[MIT](https://github.com/fluritheme/spider/blob/main/LICENSE). Made by [Fluri](https://fluri.xyz/). Original procedural character artwork is included under the same license. Self-hosted demo fonts retain their SIL Open Font Licenses in `demo/public/fonts/`.
+[MIT](https://github.com/fluritheme/spider/blob/main/LICENSE). Created by [František Gejdoš](https://fluri.xyz/founder/), founder of [Fluri Themes](https://fluri.xyz/). Original procedural character artwork is included under the same license. Self-hosted demo fonts retain their SIL Open Font Licenses in `demo/public/fonts/`.
+
+## Package availability
+
+Published on [JSR](https://jsr.io/@fluritheme/spider) and [npm](https://www.npmjs.com/package/@fluritheme/spider), with files available through [jsDelivr](https://www.jsdelivr.com/package/npm/@fluritheme/spider), [UNPKG](https://unpkg.com/@fluritheme/spider@0.1.4/) and [esm.sh](https://esm.sh/@fluritheme/spider@0.1.4). npm is the source registry; these CDNs distribute the same package. Pin versions in production.
+
+Maintainers can prepare the TypeScript JSR distribution with `node scripts/prepare-jsr.mjs`; the generated source preserves npm runtime behavior while using explicit TypeScript imports. Run the printed `deno publish --dry-run` check before publishing.

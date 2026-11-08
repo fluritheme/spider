@@ -101,7 +101,6 @@ export function createSpider(input: SpiderOptions = {}): SpiderController {
     height = 0,
     dpr = 1;
   let lastMeasure = -Infinity;
-  let scrollingUntil = 0;
   let silkCleared = false;
   let pointer: Point | null = null,
     pointerUntil = Infinity;
@@ -431,11 +430,10 @@ export function createSpider(input: SpiderOptions = {}): SpiderController {
     if (state === 'destroyed' || doc.hidden) return;
     const dt = lastTime ? Math.min((time - lastTime) / 1000, 0.05) : 0;
     lastTime = time;
-    const scrolling = time < scrollingUntil;
-    if (state === 'running' && !reduced && !scrolling) clock += dt * options.speed;
+    if (state === 'running' && !reduced) clock += dt * options.speed;
     if (dirty || (options.observe && state === 'running' && !reduced && time - lastMeasure > 750))
       measure();
-    draw(state === 'running' && !scrolling ? dt : 0);
+    draw(state === 'running' ? dt : 0);
     if (state === 'running' && !reduced) schedule();
   }
   function listen(
@@ -468,7 +466,6 @@ export function createSpider(input: SpiderOptions = {}): SpiderController {
     doc,
     'scroll',
     () => {
-      scrollingUntil = win.performance.now() + 160;
       pointer = null;
       invalidate();
     },
