@@ -13,6 +13,7 @@ export type {
 import { pageObjects, outsideObjects, type PageObject } from './objects.js';
 import { makeResident, stepResident, paintThreads, type Resident as Roamer } from './resident.js';
 import { measureNetwork, type SilkNetwork } from './silk.js';
+import { silkWhite, strokeSilk } from './silk-paint.js';
 interface Resident {
   element: HTMLElement;
   x: number;
@@ -30,7 +31,7 @@ export function createSpider(input: SpiderOptions = {}): SpiderController {
     residents: Resident[] = [];
   let roamers: Roamer[] = [],
     objects: PageObject[] = [],
-    network: SilkNetwork = { anchors: [] };
+    network: SilkNetwork = { anchors: [], retained: new Map() };
   let worldObjects: PageObject[] = [];
   const snapshot = (): SpiderSnapshot => ({
     state,
@@ -100,6 +101,7 @@ export function createSpider(input: SpiderOptions = {}): SpiderController {
     height = 0,
     dpr = 1;
   let lastMeasure = -Infinity;
+  let scrollingUntil = 0;
   let silkCleared = false;
   let pointer: Point | null = null,
     pointerUntil = Infinity;
@@ -268,12 +270,17 @@ export function createSpider(input: SpiderOptions = {}): SpiderController {
             ctx,
             resident,
             surface.anchor,
-            surface.ink,
+            options.color === 'auto' ? '#6c5140' : surface.ink,
             options.size,
             clock + index * 1.7,
             reduced ? null : pointer,
             fear.scared ? 1 : 0,
             reduced,
+            0,
+            0,
+            false,
+            surface.ink,
+            options.webOpacity,
           );
         }
       }
@@ -320,6 +327,7 @@ export function createSpider(input: SpiderOptions = {}): SpiderController {
           );
         const ink = options.color === 'auto' ? '#6c5140' : options.color;
         resident.ink = ink;
+        resident.silkInk = options.color === 'auto' ? silkWhite : options.color;
         const screen = { x: resident.x - scroll.x, y: resident.y - scroll.y };
         ctx.save();
         ctx.translate(-scroll.x, -scroll.y);
@@ -328,6 +336,7 @@ export function createSpider(input: SpiderOptions = {}): SpiderController {
           resident.dragFrom &&
           resident.behavior !== 'descending' &&
           !resident.activeThread &&
+          !resident.task &&
           options.webOpacity > 0
         ) {
           const distance = Math.hypot(
@@ -346,7 +355,7 @@ export function createSpider(input: SpiderOptions = {}): SpiderController {
               resident.x,
               resident.y,
             );
-            ctx.stroke();
+            strokeSilk(ctx, resident.silkInk, 0.65, options.webOpacity * 0.7);
           }
         }
 
@@ -362,7 +371,7 @@ export function createSpider(input: SpiderOptions = {}): SpiderController {
             resident.landing.x,
             resident.landing.y,
           );
-          ctx.stroke();
+          strokeSilk(ctx, resident.silkInk, 0.7, options.webOpacity);
         }
         ctx.restore();
         ctx.globalAlpha = 1;
@@ -402,6 +411,8 @@ export function createSpider(input: SpiderOptions = {}): SpiderController {
           resident.angle,
           resident.gait,
           resident.velocity > 4,
+          resident.silkInk,
+          options.webOpacity,
         );
         ctx.restore();
       });
@@ -420,10 +431,11 @@ export function createSpider(input: SpiderOptions = {}): SpiderController {
     if (state === 'destroyed' || doc.hidden) return;
     const dt = lastTime ? Math.min((time - lastTime) / 1000, 0.05) : 0;
     lastTime = time;
-    if (state === 'running' && !reduced) clock += dt * options.speed;
+    const scrolling = time < scrollingUntil;
+    if (state === 'running' && !reduced && !scrolling) clock += dt * options.speed;
     if (dirty || (options.observe && state === 'running' && !reduced && time - lastMeasure > 750))
       measure();
-    draw(state === 'running' ? dt : 0);
+    draw(state === 'running' && !scrolling ? dt : 0);
     if (state === 'running' && !reduced) schedule();
   }
   function listen(
@@ -452,7 +464,16 @@ export function createSpider(input: SpiderOptions = {}): SpiderController {
     schedule();
   }
   listen(win, 'resize', invalidate);
-  listen(doc, 'scroll', invalidate, true);
+  listen(
+    doc,
+    'scroll',
+    () => {
+      scrollingUntil = win.performance.now() + 160;
+      pointer = null;
+      invalidate();
+    },
+    true,
+  );
   listen(doc, 'pointermove', (event) => {
     if (state !== 'running' || reduced) return;
     const e = event as PointerEvent;
@@ -583,7 +604,7 @@ export function createSpider(input: SpiderOptions = {}): SpiderController {
       observed = [];
       roamers = [];
       objects = [];
-      network = { anchors: [] };
+      network = { anchors: [], retained: new Map() };
       worldObjects = [];
     },
     getState: snapshot,

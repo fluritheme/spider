@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.1.3 — 2026-11-08
+
+- Vary physical webs between irregular draped sheets, off-center fans and sparse, branched bridges. Each construction gets its own spacing, tension, open pockets and finer lacing.
+- Give support, capture and tying silk different weights and stable variations in reflectance.
+- Follow already-laid curves when walking between stitches, with shared live knots that stay connected during reflow.
+- Keep finished webs instead of deleting old construction groups. At the 2,048-strand ceiling, stop adding silk until explicitly cleared.
+- Preserve exploration draglines and interrupted strands, and retain support identities across temporary hiding.
+- Stop scroll gestures from causing walking drift or pointer-triggered fleeing.
+- Keep all automatic silk white, including the descent thread, with a faint outline for light backgrounds and independent body coloring.
+- Refresh actual runtime README previews and add regression coverage for physical connectivity, retained silk and scrolling.
+
 ## 0.1.2 — 2026-11-08
 
 - Apply burnt-pumpkin, charcoal, ivory, and amber styling across the website and preview assets.

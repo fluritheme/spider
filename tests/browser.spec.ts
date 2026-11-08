@@ -1,8 +1,12 @@
 import { expect, test, type Page } from '@playwright/test';
 import type { SpiderController, SpiderOptions } from '../src';
+import type { measureNetwork } from '../src/silk';
+import type { paintSpider } from '../src/paint';
 declare global {
   interface Window {
     spider: SpiderController;
+    measureNetwork: typeof measureNetwork;
+    paintSpider: typeof paintSpider;
     createSpider: (options?: SpiderOptions) => SpiderController;
   }
 }
@@ -358,4 +362,106 @@ test('clicks and Shift-drag preserve silk; clearWebs removes it explicitly', asy
   await page.evaluate(() => window.spider.clearWebs());
   expect(await page.evaluate(() => window.spider.getState().spiders[0]!.threads)).toBe(0);
   expect(await page.evaluate(() => window.spider.getState().state)).toBe('paused');
+});
+
+test('scrolling a running resident does not drift or trigger fear from a parked pointer', async ({
+  page,
+}) => {
+  await page.clock.install();
+  await page.clock.pauseAt(new Date());
+  await startLoom(page);
+  await page.clock.runFor(6000);
+  const before = await page.evaluate(() => window.spider.getState().spiders[0]!);
+  await page.mouse.move(before.x + 2, before.y - (await page.evaluate(() => scrollY)));
+  await page.evaluate(() => {
+    scrollTo(0, 180);
+    document.dispatchEvent(new Event('scroll'));
+  });
+  await page.clock.runFor(120);
+  const after = await page.evaluate(() => window.spider.getState().spiders[0]!);
+  expect(after.x).toBe(before.x);
+  expect(after.y).toBe(before.y);
+  expect(after.threads).toBe(before.threads);
+  expect(after.scared).toBe(false);
+  await page.evaluate(() => {
+    scrollTo(0, 0);
+    document.dispatchEvent(new Event('scroll'));
+  });
+  await page.clock.runFor(120);
+  const back = await page.evaluate(() => window.spider.getState().spiders[0]!);
+  expect(back.x).toBe(before.x);
+  expect(back.y).toBe(before.y);
+});
+
+test('silk anchor identities survive hidden elements and subsequent layout changes', async ({
+  page,
+}) => {
+  await ready(page);
+  const result = await page.evaluate(async () => {
+    window.spider.destroy();
+    const { measureNetwork } = window;
+    const heading = document.createElement('h1');
+    heading.textContent = 'WEB';
+    heading.style.cssText = 'position:absolute;left:40px;top:110px;font:90px Georgia;margin:0';
+    document.body.replaceChildren(heading);
+    const initial = measureNetwork(document, [], { anchors: [], retained: new Map() });
+    const anchor = initial.anchors[0]!;
+    const before = { x: anchor.x, y: anchor.y };
+    heading.style.display = 'none';
+    const hidden = measureNetwork(document, [], initial);
+    heading.style.display = 'block';
+    heading.style.left = '77px';
+    heading.style.top = '132px';
+    const restored = measureNetwork(document, [], hidden);
+    return {
+      hidden: hidden.anchors.length,
+      same: restored.anchors[0] === anchor,
+      dx: anchor.x - before.x,
+      dy: anchor.y - before.y,
+    };
+  });
+  expect(result.hidden).toBe(0);
+  expect(result.same).toBe(true);
+  expect(result.dx).toBeCloseTo(37, 2);
+  expect(result.dy).toBeCloseTo(22, 2);
+});
+
+test('the descent thread stays white with a faint outline visible on a white page', async ({
+  page,
+}) => {
+  await page.goto('/preview.html');
+  const result = await page.evaluate(() => {
+    window.spider.destroy();
+    const canvas = document.createElement('canvas');
+    canvas.width = 160;
+    canvas.height = 220;
+    const ctx = canvas.getContext('2d')!;
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, 160, 220);
+    const strokes: { ink: string; alpha: number; width: number }[] = [];
+    const original = (ctx.stroke as () => void).bind(ctx);
+    ctx.stroke = () => {
+      strokes.push({ ink: String(ctx.strokeStyle), alpha: ctx.globalAlpha, width: ctx.lineWidth });
+      original();
+    };
+    window.paintSpider(ctx, { x: 80, y: 170 }, { x: 80, y: 0 }, '#6c5140', 1, 0, null, 0, true);
+    const data = ctx.getImageData(78, 15, 4, 65).data;
+    let contrast = 0,
+      colored = 0;
+    for (let i = 0; i < data.length; i += 4) {
+      if (data[i]! < 253) contrast++;
+      if (
+        Math.max(data[i]!, data[i + 1]!, data[i + 2]!) -
+          Math.min(data[i]!, data[i + 1]!, data[i + 2]!) >
+        1
+      )
+        colored++;
+    }
+    return { strokes: strokes.slice(0, 2), contrast, colored };
+  });
+  expect(result.strokes.map((stroke) => stroke.ink)).toEqual(['#242424', '#ffffff']);
+  expect(result.strokes[0]!.width).toBeGreaterThan(result.strokes[1]!.width);
+  expect(result.strokes[0]!.alpha).toBeLessThan(result.strokes[1]!.alpha);
+  expect(result.contrast).toBeGreaterThan(8);
+  expect(result.colored).toBe(0);
 });

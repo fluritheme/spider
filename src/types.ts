@@ -57,7 +57,7 @@ export type SpiderTuning = Pick<
   'size' | 'speed' | 'fearRadius' | 'webOpacity' | 'webDensity' | 'webSize' | 'color'
 >;
 export interface SpiderController {
-  /** Re-measure targets, clipping, stacking, and background colors. */
+  /** Re-measure targets, clipping, stacking, and silk attachments. */
   refresh(): void;
   /** Remove all silk. The resident can begin weaving again afterward. */
   clearWebs(): void;

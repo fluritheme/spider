@@ -1,5 +1,6 @@
 import { clamp, cornerPoint, webLines, type Point } from './geometry.js';
 import type { Surface } from './layers.js';
+import { silkWhite, strokeSilk } from './silk-paint.js';
 const geometry = new Map<number, Point[][]>();
 export function paintWeb(
   ctx: CanvasRenderingContext2D,
@@ -28,8 +29,7 @@ export function paintWeb(
       if (j === 0) ctx.moveTo(q.x, q.y);
       else ctx.lineTo(q.x, q.y);
     }
-    ctx.globalAlpha = opacity * reveal;
-    ctx.stroke();
+    strokeSilk(ctx, surface.ink, 0.8, opacity * reveal);
   }
   ctx.globalAlpha = 1;
 }
@@ -47,11 +47,10 @@ export function paintSpider(
   angle = 0,
   gait = 0,
   walking = false,
+  silkInk = silkWhite,
+  silkOpacity = 0.4,
 ): void {
   if (anchor) {
-    ctx.strokeStyle = ink;
-    ctx.lineWidth = 0.7;
-    ctx.globalAlpha = 0.35;
     ctx.beginPath();
     ctx.moveTo(anchor.x, anchor.y);
     ctx.quadraticCurveTo(
@@ -60,7 +59,7 @@ export function paintSpider(
       position.x,
       position.y - 12 * size,
     );
-    ctx.stroke();
+    strokeSilk(ctx, silkInk, 0.7, silkOpacity);
   }
   ctx.globalAlpha = 1;
   ctx.save();

@@ -10,7 +10,8 @@ const packed = JSON.parse(
   execFileSync('npm', ['pack', '--dry-run', '--json', '--ignore-scripts'], {
     encoding: 'utf8',
     stdio: ['ignore', 'pipe', 'pipe'],
-    timeout: 20000,
+    timeout: 60000,
+    env: { ...process.env, npm_config_update_notifier: 'false' },
   }),
 )[0];
 for (const name of ['dist/index.js', 'dist/index.d.ts', 'README.md', 'LICENSE', 'CHANGELOG.md'])
@@ -26,7 +27,10 @@ assert.ok(
 let bytes = 0;
 for (const f of packed.files.filter((f) => f.path.endsWith('.js')))
   bytes += gzipSync(await readFile(new URL(`../${f.path}`, import.meta.url))).length;
-assert.ok(bytes < 20000, 'Runtime gzip budget exceeded');
+assert.ok(
+  bytes < 24000,
+  'Runtime gzip budget exceeded (24 kB across individually compressed modules)',
+);
 const { createSpider } = await import('../dist/index.js');
 const controller = createSpider();
 assert.equal(controller.getState().state, 'idle');

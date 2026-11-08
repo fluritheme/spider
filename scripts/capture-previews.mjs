@@ -14,7 +14,12 @@ try {
   });
   const animated = await context.newPage();
   await animated.goto('http://127.0.0.1:5198');
-  await animated.waitForTimeout(30000);
+  await animated.waitForTimeout(1200);
+  await animated.screenshot({
+    path: new URL('entrance.png', output).pathname,
+    clip: { x: 0, y: 0, width: 1080, height: 570 },
+  });
+  await animated.waitForTimeout(28800);
   const video = animated.video();
   await context.close();
   execFileSync(
@@ -39,18 +44,25 @@ try {
   await page.goto('http://127.0.0.1:5198');
   await page.waitForFunction(
     () =>
-      Number(document.querySelector('#thread-count')?.textContent) >= 18 &&
+      Number(document.querySelector('#thread-count')?.textContent) >= 65 &&
       document.querySelector('#activity')?.textContent?.includes('WEAVING'),
     null,
-    { timeout: 45000 },
+    { timeout: 90000 },
   );
   await page
     .locator('#playground')
     .screenshot({ path: new URL('playground.png', output).pathname });
   await page.screenshot({
     path: new URL('woven-page.png', output).pathname,
-    clip: { x: 0, y: 110, width: 1440, height: 650 },
+    clip: { x: 300, y: 130, width: 900, height: 460 },
   });
+  await page.locator('[data-theme="paper"]').evaluate((button) => button.click());
+  await page.waitForTimeout(150);
+  await page.screenshot({
+    path: new URL('light.png', output).pathname,
+    clip: { x: 300, y: 130, width: 900, height: 460 },
+  });
+  await page.locator('[data-theme="ember"]').evaluate((button) => button.click());
   await page.setViewportSize({ width: 1200, height: 900 });
   await page.waitForTimeout(300);
   await page.screenshot({

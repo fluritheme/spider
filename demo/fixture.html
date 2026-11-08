@@ -70,6 +70,8 @@
   </div>
   <script type="module">
     import { createSpider } from '../src/index.ts';
+    import { measureNetwork } from '../src/silk.ts';
+    window.measureNetwork = measureNetwork;
     window.createSpider = createSpider;
     window.spider = createSpider({
       root: document.querySelector('#root'),

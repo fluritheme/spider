@@ -1,5 +1,6 @@
 import { clamp, intersect, cornerPoint, type Box, type Point } from './geometry.js';
 import type { Corner } from './types.js';
+import { silkWhite } from './silk-paint.js';
 export interface Surface {
   element: HTMLElement;
   box: Box;
@@ -17,20 +18,6 @@ const boxOf = (element: Element): Box => {
   const r = element.getBoundingClientRect();
   return { x: r.left, y: r.top, width: r.width, height: r.height };
 };
-export function inkFor(element: HTMLElement, win: Window): string {
-  let current: Element | null = element;
-  while (current) {
-    const background = win.getComputedStyle(current).backgroundColor;
-    const parts = background.match(/[\d.]+/g)?.map(Number);
-    if (parts && parts.length >= 3 && (parts[3] ?? 1) > 0.8) {
-      return parts[0]! * 0.2126 + parts[1]! * 0.7152 + parts[2]! * 0.0722 > 145
-        ? '#29282b'
-        : '#f2eee6';
-    }
-    current = current.parentElement;
-  }
-  return win.matchMedia('(prefers-color-scheme: dark)').matches ? '#f2eee6' : '#29282b';
-}
 export function isVisible(element: HTMLElement, point: Point, doc: Document): boolean {
   const top = doc.elementFromPoint(point.x, point.y);
   return top !== null && (element === top || element.contains(top));
@@ -120,7 +107,7 @@ export function measureSurface(
     box: webBox,
     corner,
     span: size,
-    ink: color === 'auto' ? inkFor(element, win) : color,
+    ink: color === 'auto' ? silkWhite : color,
     clip,
     anchor,
     home,

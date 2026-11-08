@@ -1,6 +1,6 @@
 import type { Box, Point } from './geometry.js';
 import { elementMatrix } from './objects.js';
-import { inkFor } from './layers.js';
+import { silkWhite } from './silk-paint.js';
 export interface SilkAnchor extends Point {
   id: string;
   element: HTMLElement;
@@ -11,6 +11,7 @@ export interface SilkAnchor extends Point {
 }
 export interface SilkNetwork {
   anchors: SilkAnchor[];
+  retained: Map<string, SilkAnchor>;
 }
 const ids = new WeakMap<Element, number>();
 let nextId = 1;
@@ -128,7 +129,7 @@ export function measureNetwork(
             width: r.width,
             height: r.height,
           },
-          ink = inkFor(heading, win);
+          ink = silkWhite;
         letterContour(doc, letter, r.width, r.height, style).forEach((p, index) =>
           anchors.push({
             id: `t${identity(heading)}:${count}:${index}`,
@@ -152,7 +153,7 @@ export function measureNetwork(
     if (r.width < 40 || r.height < 40 || style.visibility !== 'visible' || style.display === 'none')
       continue;
     const inset = Math.max(4, (parseFloat(style.borderRadius) || 0) * 0.5),
-      ink = inkFor(element, win);
+      ink = silkWhite;
     const matrix = elementMatrix(element, win),
       width = element.offsetWidth || r.width,
       height = element.offsetHeight || r.height;
@@ -172,15 +173,19 @@ export function measureNetwork(
       });
     });
   }
-  const old = new Map(previous.anchors.map((a) => [a.id, a]));
-  return {
-    anchors: anchors.slice(0, 640).map((a) => {
-      const same = old.get(a.id);
-      if (same) {
-        Object.assign(same, a);
-        return same;
-      }
-      return a;
-    }),
-  };
+  const retained = previous.retained;
+  for (const [id, anchor] of retained) if (!anchor.element.isConnected) retained.delete(id);
+  const active: SilkAnchor[] = [];
+  for (const anchor of anchors.slice(0, 640)) {
+    const same = retained.get(anchor.id);
+    if (same) {
+      Object.assign(same, anchor);
+      active.push(same);
+    } else if (retained.size < 8192) {
+      retained.set(anchor.id, anchor);
+      active.push(anchor);
+    }
+  }
+  // Hidden/reflowed elements keep their old identities, so returning supports reconnect to the same knots.
+  return { anchors: active, retained };
 }
