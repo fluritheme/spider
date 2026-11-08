@@ -1,0 +1,13 @@
+{
+  "name": "fluri-spider",
+  "account_id": "b1daed2b24d520cf26a5ea50571cb1a3",
+  "compatibility_date": "2026-11-08",
+  "workers_dev": false,
+  "preview_urls": false,
+  "routes": [{ "pattern": "spider.fluri.xyz", "custom_domain": true }],
+  "assets": {
+    "directory": "./site-dist",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page",
+  },
+}

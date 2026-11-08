@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+  <meta charset="utf-8" /><meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+  /><title>Spider — actual runtime preview</title
+  ><style>
+    @font-face {
+      font-family: Instrument;
+      src: url('/fonts/instrument-serif.woff2');
+    }
+    @font-face {
+      font-family: DM;
+      src: url('/fonts/dm-sans-latin.woff2');
+      font-weight: 400 700;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      width: 900px;
+      height: 540px;
+      background: #f5f2eb;
+      color: #29282b;
+      font:
+        12px DM,
+        system-ui;
+      overflow: hidden;
+    }
+    main {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+    .eyebrow {
+      position: absolute;
+      left: 45px;
+      top: 35px;
+      letter-spacing: 2px;
+      color: #8f7461;
+      font-size: 9px;
+    }
+    h1 {
+      position: absolute;
+      left: 44px;
+      top: 50px;
+      font:
+        74px Instrument,
+        Georgia;
+      margin: 0;
+      letter-spacing: -2px;
+    }
+    .caption {
+      position: absolute;
+      left: 47px;
+      top: 152px;
+      color: #8a7c6d;
+      font-size: 12px;
+    }
+    .card {
+      position: absolute;
+      border-radius: 9px;
+      padding: 30px;
+      box-shadow: 0 15px 35px -20px #392d2955;
+    }
+    .one {
+      left: 430px;
+      top: 210px;
+      width: 340px;
+      height: 260px;
+      background: #37313c;
+      color: #f2eee6;
+      transform: rotate(4deg);
+    }
+    .one h2 {
+      font:
+        46px Instrument,
+        Georgia;
+      margin: 33px 0 12px;
+    }
+    .one p {
+      color: #b8a998;
+      font-size: 12px;
+      line-height: 1.8;
+    }
+    .label {
+      font-size: 8px;
+      letter-spacing: 2px;
+      opacity: 0.6;
+    }
+    .two {
+      left: 120px;
+      top: 242px;
+      width: 235px;
+      height: 200px;
+      background: #bd4b29;
+      color: #fff1db;
+      transform: rotate(-6deg);
+    }
+    .two h2 {
+      font:
+        37px Instrument,
+        Georgia;
+      margin: 28px 0 10px;
+    }
+    .two p {
+      font-size: 11px;
+      line-height: 1.8;
+      opacity: 0.8;
+    }
+    .footer {
+      position: absolute;
+      left: 47px;
+      bottom: 25px;
+      font-size: 9px;
+      color: #8a7c6d;
+    }
+    .status {
+      position: absolute;
+      right: 40px;
+      top: 43px;
+      font-size: 9px;
+      letter-spacing: 1.5px;
+      color: #bd4b29;
+    }
+    .corner {
+      position: absolute;
+      right: 42px;
+      bottom: 24px;
+      font-size: 10px;
+      color: #8a7c6d;
+    }
+  </style>
+  <main>
+    <span class="eyebrow">SPIDER / BY FLURI</span>
+    <h1>A little company.</h1>
+    <p class="caption">Eight legs. Curious eyes. A whole page to explore.</p>
+    <span class="status">● ACTUAL PACKAGE. LIVE RENDERING.</span>
+    <article class="card one" data-spider-web="top-left">
+      <span class="label">THE QUIET CORNER</span>
+      <h2>Hide & seek.</h2>
+      <p>A little silk. A little stroll.<br />And somewhere good to hide.</p>
+    </article>
+    <article class="card two" data-spider-web="top-right">
+      <span class="label">A GOOD GUEST</span>
+      <h2>Oh, hello.</h2>
+      <p>I might stay a little while.<br />Hope you don’t mind.</p>
+    </article>
+    <span class="footer">Zero dependencies · Original vector character · DOM-aware silk</span
+    ><span class="corner">spider.fluri.xyz ↗</span>
+  </main>
+  <script type="module">
+    import { createSpider } from '../src/index.ts';
+    import { paintSpider } from '../src/paint.ts';
+    window.paintSpider = paintSpider;
+    Math.random = () => 0.1;
+    window.spider = createSpider({
+      spiders: 1,
+      size: 1.5,
+      webSize: 150,
+      speed: 1.8,
+      fearRadius: 0,
+      webOpacity: 0.48,
+      objects: '.one',
+      weave: true,
+    });
+  </script>
+</html>
