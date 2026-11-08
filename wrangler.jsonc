@@ -1,11 +1,26 @@
 {
   "name": "fluri-spider",
+  "main": "workers/site.ts",
   "account_id": "b1daed2b24d520cf26a5ea50571cb1a3",
   "compatibility_date": "2026-11-08",
   "workers_dev": false,
   "preview_urls": false,
   "routes": [{ "pattern": "spider.fluri.xyz", "custom_domain": true }],
+  "d1_databases": [
+    {
+      "binding": "ANALYTICS_DB",
+      "database_name": "spider-analytics",
+      "database_id": "47a4ea67-4133-4a3d-a6d4-be01c00b1060",
+      "migrations_dir": "migrations",
+    },
+  ],
+  "ratelimits": [
+    { "name": "API_LIMIT", "namespace_id": "1011", "simple": { "limit": 60, "period": 60 } },
+    { "name": "LOGIN_LIMIT", "namespace_id": "1012", "simple": { "limit": 5, "period": 60 } },
+  ],
   "assets": {
+    "binding": "ASSETS",
+    "run_worker_first": true,
     "directory": "./site-dist",
     "html_handling": "auto-trailing-slash",
     "not_found_handling": "404-page",

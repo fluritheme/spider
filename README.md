@@ -254,6 +254,8 @@ The canvas is `aria-hidden` and `pointer-events: none`; content remains clickabl
 
 The npm runtime has no dependencies, trackers, storage, network calls, or remote assets. The demo self-hosts its fonts and assets. If your Content Security Policy restricts inline style attributes, allow the canvas positioning style through your policy or adapt those styles in a local integration.
 
+The demonstration website keeps private, cookie-free aggregate page counts, separately from the package. It respects Do Not Track and Global Privacy Control. See the [site privacy notice](https://spider.fluri.xyz/privacy/) and [operator guide](https://github.com/fluritheme/spider/blob/main/docs/analytics.md). Installing Spider never reports your website’s visitors.
+
 ## Development
 
 ```sh
@@ -262,7 +264,7 @@ pnpm dev                 # http://127.0.0.1:5198
 pnpm check               # types, unit tests, build, site build, browser tests
 pnpm format:check
 pnpm release:check       # SSR import, archive allowlist, dependency and size checks
-pnpm deploy              # Cloudflare Worker: spider.fluri.xyz
+pnpm run deploy              # Cloudflare Worker: spider.fluri.xyz
 ```
 
 Install test browsers once with `pnpm exec playwright install --with-deps chromium firefox webkit`. See [CONTRIBUTING.md](https://github.com/fluritheme/spider/blob/main/CONTRIBUTING.md) and [SECURITY.md](https://github.com/fluritheme/spider/blob/main/SECURITY.md). Readme previews are captured from the real package with `node scripts/capture-previews.mjs` while the dev server is running (FFmpeg is required for the GIF).

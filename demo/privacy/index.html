@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#181510" />
+    <meta
+      name="description"
+      content="How Spider counts website traffic, and what the package never collects."
+    />
+    <title>Spider — privacy & measurement</title>
+    <link rel="canonical" href="https://spider.fluri.xyz/privacy/" />
+    <link rel="icon" href="/spider.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/dashboard.css" />
+  </head>
+  <body>
+    <header class="dashboard-header">
+      <a class="brand" href="/">spider<span>BY FLURI</span></a
+      ><a href="/">Back to the habitat ↗</a>
+    </header>
+    <main class="privacy-copy">
+      <span class="eyebrow">PRIVACY / UPDATED 8 NOVEMBER 2026</span>
+      <h1>A small<br /><em>footprint.</em></h1>
+      <h2>The package</h2>
+      <p>
+        @fluritheme/spider does not send analytics, visitor data or installation reports. It runs
+        locally on the website where you install it. This website’s measurements are separate from
+        the package.
+      </p>
+      <h2>This website</h2>
+      <p>
+        We count successful public HTML page requests to understand interest in Spider and improve
+        this site. Cloudflare Workers aggregates these into daily totals in a separate Cloudflare D1
+        database created with EU jurisdiction. Only the UTC date, a fixed public page path, a broad
+        referral category, count and update time are stored. Query strings, full referrer URLs, IP
+        addresses, user agents and visitor identifiers are not stored in this analytics database.
+      </p>
+      <p>
+        We do not use analytics cookies, tracking scripts or fingerprinting. Requests carrying Do
+        Not Track or Global Privacy Control are excluded. Common bots, prefetches, errors, assets,
+        the dashboard and API are excluded. Filtering is approximate; counts represent requests
+        including repeat visits, not unique people.
+      </p>
+      <h2>Retention & access</h2>
+      <p>
+        Daily traffic totals are kept for the latest 90 UTC calendar days. A daily retention job
+        removes older rows and expired administrator sessions. Hosting backups follow Cloudflare
+        D1’s Time Travel retention. Only authenticated administrators can access the dashboard and
+        exports.
+      </p>
+      <p>
+        Administrators use an essential, secure, HTTP-only session cookie expiring after eight
+        hours. Only a hash of the random session token is stored. Login and API endpoints use
+        Cloudflare rate limits; the daily hashed network address used for that limit is separate
+        from analytics and is not stored in D1.
+      </p>
+      <h2>npm & GitHub</h2>
+      <p>
+        The private dashboard fetches official aggregate download statistics for @fluritheme/spider
+        from npm on the server. Downloads include CI and repeat installations. They are not website
+        visitors or npm page views. GitHub repository traffic is available through a link to
+        GitHub’s separate, collaborator-only report.
+      </p>
+      <h2>Hosting & contact</h2>
+      <p>
+        Cloudflare processes network request data to deliver and protect this site under its own
+        service terms. Our aggregate measurement serves our legitimate interest in understanding
+        product interest without identifying visitors. For questions about this site or data
+        protection, contact František Gejdoš in Slovakia at
+        <a href="mailto:fluritheme@gmail.com">fluritheme@gmail.com</a>. You can ask about access,
+        correction, deletion or objection where applicable; the aggregate rows do not identify
+        individual visitors. You may also contact your local data protection authority.
+      </p>
+    </main>
+    <footer><span>SMALL PACKAGE. SMALL FOOTPRINT.</span><a href="/">spider.fluri.xyz ↗</a></footer>
+  </body>
+</html>

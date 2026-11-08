@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#181510" />
+    <title>Spider — private dashboard</title>
+    <link rel="icon" href="/spider.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/dashboard.css" />
+  </head>
+  <body>
+    <header class="dashboard-header">
+      <a class="brand" href="/">spider<span>BY FLURI</span></a
+      ><span class="eyebrow">PRIVATE / ANALYTICS</span>
+    </header>
+    <main>
+      <section id="login" class="login-card" hidden>
+        <span class="eyebrow">FOR YOUR EYES ONLY</span>
+        <h1>Behind<br /><em>the web.</em></h1>
+        <p>Website traffic. Package downloads. Your little corner of the internet, in numbers.</p>
+        <form id="login-form">
+          <label for="password">Dashboard access key</label>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            autocomplete="current-password"
+            required
+            maxlength="256"
+            aria-describedby="login-help"
+          />
+          <small id="login-help">Use your existing Fluri dashboard access key.</small>
+          <button type="submit">Open dashboard <span aria-hidden="true">↗</span></button>
+        </form>
+      </section>
+      <p id="message" class="message" role="status">Checking your session…</p>
+      <div id="dashboard" hidden>
+        <nav class="dashboard-actions" aria-label="Dashboard actions">
+          <span id="updated"></span>
+          <div>
+            <button id="refresh" type="button">Refresh</button
+            ><a class="button" href="/api/dashboard/export" download>Export JSON ↗</a
+            ><button id="logout" type="button">Sign out</button>
+          </div>
+        </nav>
+        <div id="growth"></div>
+      </div>
+    </main>
+    <footer>
+      <span>SMALL PACKAGE. EIGHT LEGS. REAL NUMBERS.</span
+      ><a href="/privacy/">Privacy & measurement ↗</a>
+    </footer>
+    <script type="module" src="/dashboard.ts"></script>
+  </body>
+</html>
