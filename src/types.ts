@@ -22,6 +22,10 @@ export interface SpiderOptions {
   objects?: string;
   /** Spider scale. 0.5–2; default 1. */
   size?: number;
+  /** Occasional flies to hunt and catch in real woven silk. Roaming mode only; default true. */
+  flies?: boolean;
+  /** Time between visits in simulation seconds, 8–180; default 35. */
+  flyInterval?: number;
   /** Movement speed. 0.25–3; default 1. */
   speed?: number;
   /** Pointer fear radius in CSS pixels. 0 disables fear. 0–300; default 110. */
@@ -43,24 +47,49 @@ export interface SpiderSnapshot {
   readonly state: 'running' | 'paused' | 'destroyed' | 'idle';
   readonly reducedMotion: boolean;
   readonly webs: number;
+  readonly flies: readonly {
+    x: number;
+    y: number;
+    state: 'flying' | 'trapped' | 'wrapping' | 'eating';
+  }[];
+  readonly fliesEaten: number;
   readonly spiders: readonly {
     x: number;
     y: number;
     scared: boolean;
     visible: boolean;
     threads: number;
-    behavior: 'descending' | 'exploring' | 'weaving' | 'hiding' | 'resting' | 'fleeing' | 'hanging';
+    behavior:
+      | 'descending'
+      | 'exploring'
+      | 'weaving'
+      | 'hiding'
+      | 'resting'
+      | 'fleeing'
+      | 'hanging'
+      | 'hunting'
+      | 'eating';
   }[];
 }
 export type SpiderTuning = Pick<
   SpiderOptions,
-  'size' | 'speed' | 'fearRadius' | 'webOpacity' | 'webDensity' | 'webSize' | 'color'
+  | 'size'
+  | 'speed'
+  | 'fearRadius'
+  | 'webOpacity'
+  | 'webDensity'
+  | 'webSize'
+  | 'color'
+  | 'flies'
+  | 'flyInterval'
 >;
 export interface SpiderController {
   /** Re-measure targets, clipping, stacking, and silk attachments. */
   refresh(): void;
   /** Remove all silk. The resident can begin weaving again afterward. */
   clearWebs(): void;
+  /** Invite one fly on the next animated frame; never overrides pause or reduced motion. */
+  releaseFly(): void;
   /** Change appearance and behavior without removing existing silk. */
   update(options: SpiderTuning): void;
   pause(): void;

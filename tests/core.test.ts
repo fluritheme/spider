@@ -15,6 +15,8 @@ describe('public API in server environments', () => {
       state: 'destroyed',
       reducedMotion: false,
       webs: 0,
+      flies: [],
+      fliesEaten: 0,
       spiders: [],
     });
   });

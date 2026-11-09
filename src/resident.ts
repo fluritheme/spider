@@ -1,10 +1,12 @@
 import { clamp, type Box, type Point } from './geometry.js';
 import type { PageObject } from './objects.js';
 import type { SilkAnchor } from './silk.js';
+import type { HuntGoal } from './prey.js';
 import { silkWhite, strokeSilk } from './silk-paint.js';
 import { buildWeb, curvePoint, taskPoint, type WeaveTask, type SilkKind } from './weaving.js';
 export { curvePoint } from './weaving.js';
-export type Behavior = 'descending' | 'exploring' | 'weaving' | 'hiding' | 'resting' | 'fleeing';
+export type Behavior =
+  'descending' | 'exploring' | 'weaving' | 'hiding' | 'resting' | 'fleeing' | 'hunting' | 'eating';
 export interface SilkThread {
   from: Point;
   to: Point;
@@ -187,6 +189,7 @@ export function stepResident(
   density = 0.7,
   span = 112,
   color = 'auto',
+  prey?: HuntGoal,
 ): void {
   if (r.behavior === 'descending') {
     const dy = r.landing.y - r.y;
@@ -224,6 +227,31 @@ export function stepResident(
       )
     )
       r.behind = true;
+  }
+  if (!r.scared && prey) {
+    if (r.behavior !== 'hunting' && r.behavior !== 'eating') cancelWeave(r);
+    r.behavior = prey.feeding ? 'eating' : 'hunting';
+    r.target = null;
+    r.behind = false;
+    r.destination = { ...prey.point };
+    const dx = prey.point.x - r.x,
+      dy = prey.point.y - r.y,
+      length = Math.hypot(dx, dy);
+    const travel = prey.feeding ? 0 : Math.min(length, dt * 125 * speed);
+    if (travel > 0 && length > 0.1) {
+      r.x += (dx / length) * travel;
+      r.y += (dy / length) * travel;
+      moveHeading(r, dx, dy, dt);
+      r.gait += travel * 0.085;
+    }
+    r.velocity = travel / Math.max(dt, 0.001);
+    return;
+  }
+  if (r.behavior === 'hunting' || r.behavior === 'eating') {
+    settleDragline(r, { x: r.x, y: r.y }, time);
+    r.behavior = 'resting';
+    r.until = time + 0.8;
+    r.velocity = 0;
   }
   if (r.behavior === 'weaving' && !r.scared) {
     if (!r.task && !r.tasks.length && time >= r.until) {

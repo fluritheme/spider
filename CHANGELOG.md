@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.0 — 2026-11-09
+
+- Add occasional animated flies, active pursuit, physical capture on laid silk, white-silk wrapping and a small feeding animation. One fly per instance keeps the behavior bounded.
+- Preserve partially woven threads and live attachments when hunting interrupts construction. Frightened spiders can release prey; clearing a trap frees the fly.
+- Add `flies`, `flyInterval`, `releaseFly()`, fly snapshots and a completed-meal count. Pause, scrolling, root clipping, hidden tabs and reduced motion remain respected.
+- Add habitat controls, lifecycle previews and current API documentation.
+
 ## 0.1.4 — 2026-11-08
 
 - Keep the spider walking and weaving during scrolling while retaining page-relative silk anchors and ignoring a parked pointer.

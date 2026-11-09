@@ -7,7 +7,7 @@
     <title>Spider by Fluri — Animated website spider &amp; realistic webs</title>
     <meta
       name="description"
-      content="An expressive little spider that makes your website its home. Watch it descend, weave real silk between letters, explore, and hide behind your content."
+      content="An expressive little spider that makes your website its home. Watch it descend, weave real silk between letters, hunt passing flies, and hide behind your content."
     />
     <meta name="author" content="František Gejdoš" />
     <meta property="og:site_name" content="Spider by Fluri Themes" />
@@ -24,7 +24,10 @@
       property="og:title"
       content="Spider by Fluri — Animated website spider &amp; realistic webs"
     />
-    <meta property="og:description" content="Eight legs. Real silk. Your website is his now." />
+    <meta
+      property="og:description"
+      content="Eight legs. Real silk. Passing flies, playful hunts and a little snack."
+    />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://spider.fluri.xyz/" />
     <meta property="og:image" content="https://spider.fluri.xyz/social.png" />
@@ -64,7 +67,7 @@
             "@id": "https://spider.fluri.xyz/#software",
             "name": "Spider by Fluri",
             "url": "https://spider.fluri.xyz/",
-            "description": "Animated jumping spider that explores a website, hides behind DOM objects and weaves persistent silk.",
+            "description": "Animated jumping spider that explores a website, hides behind DOM objects, weaves persistent silk and catches occasional flies.",
             "codeRepository": "https://github.com/fluritheme/spider",
             "programmingLanguage": "TypeScript",
             "license": "https://opensource.org/license/mit",
@@ -176,12 +179,20 @@
               >Shy by nature</span
             ></label
           >
+          <label class="switch"
+            ><input id="flies" type="checkbox" checked role="switch" /><span
+              >Passing flies</span
+            ></label
+          >
         </div>
         <div class="transport">
           <button id="pause" aria-pressed="false">Ⅱ Pause resident</button
-          ><button id="clear-webs">Clear silk ↗</button
+          ><button id="send-fly">Send a fly ↗</button><button id="clear-webs">Clear silk ↗</button
           ><button id="reset" aria-label="Restart the descent">Restart ↓</button>
         </div>
+        <p class="control-caption" id="fly-status" aria-live="polite">
+          An occasional little visitor.
+        </p>
         <p class="control-caption">
           The actual npm package, right here. Every strand is woven by the spider. He and his silk
           stay with the page as you scroll.

@@ -13,6 +13,7 @@ export type {
 import { pageObjects, outsideObjects, type PageObject } from './objects.js';
 import { makeResident, stepResident, paintThreads, type Resident as Roamer } from './resident.js';
 import { measureNetwork, type SilkNetwork } from './silk.js';
+import { Prey } from './prey.js';
 import { silkWhite, strokeSilk } from './silk-paint.js';
 interface Resident {
   element: HTMLElement;
@@ -33,10 +34,13 @@ export function createSpider(input: SpiderOptions = {}): SpiderController {
     objects: PageObject[] = [],
     network: SilkNetwork = { anchors: [], retained: new Map() };
   let worldObjects: PageObject[] = [];
+  const prey = new Prey();
   const snapshot = (): SpiderSnapshot => ({
     state,
     reducedMotion: reduced,
     webs: surfaces.length,
+    flies: prey.fly ? [{ x: prey.fly.x, y: prey.fly.y, state: prey.fly.state }] : [],
+    fliesEaten: prey.eaten,
     spiders: options.roam
       ? roamers.map(({ x, y, scared, visible, behavior, threads }) => ({
           x,
@@ -58,6 +62,7 @@ export function createSpider(input: SpiderOptions = {}): SpiderController {
   const noop: SpiderController = {
     refresh() {},
     clearWebs() {},
+    releaseFly() {},
     update(patch) {
       resolveOptions({ ...options, ...patch });
     },
@@ -301,6 +306,32 @@ export function createSpider(input: SpiderOptions = {}): SpiderController {
               width: Math.max(width, doc.documentElement.scrollWidth),
               height: Math.max(height, doc.documentElement.scrollHeight),
             };
+      if (!reduced && state === 'running' && dt > 0 && options.flies) {
+        const area = {
+          x: Math.max(territory.x, scroll.x),
+          y: Math.max(territory.y, scroll.y),
+          width: Math.max(
+            0,
+            Math.min(territory.x + territory.width, scroll.x + width) -
+              Math.max(territory.x, scroll.x),
+          ),
+          height: Math.max(
+            0,
+            Math.min(territory.y + territory.height, scroll.y + height) -
+              Math.max(territory.y, scroll.y),
+          ),
+        };
+        prey.update(
+          dt * options.speed,
+          clock,
+          area,
+          roamers,
+          options.webOpacity,
+          options.flyInterval,
+          options.size,
+          () => true,
+        );
+      }
       roamers.forEach((resident, index) => {
         if (
           !reduced &&
@@ -323,7 +354,10 @@ export function createSpider(input: SpiderOptions = {}): SpiderController {
             options.webDensity,
             options.webSize,
             options.color,
+            options.flies ? prey.goal(resident) : undefined,
           );
+        if (!reduced && state === 'running' && dt > 0 && options.flies)
+          prey.contact(resident, options.size);
         const ink = options.color === 'auto' ? '#6c5140' : options.color;
         resident.ink = ink;
         resident.silkInk = options.color === 'auto' ? silkWhite : options.color;
@@ -404,7 +438,11 @@ export function createSpider(input: SpiderOptions = {}): SpiderController {
           ink,
           options.size,
           clock + index * 1.7,
-          reduced ? null : pointer,
+          reduced
+            ? null
+            : prey.goal(resident)
+              ? { x: prey.fly!.x - scroll.x, y: prey.fly!.y - scroll.y }
+              : pointer,
           resident.scared ? 1 : 0,
           reduced,
           resident.angle,
@@ -412,9 +450,27 @@ export function createSpider(input: SpiderOptions = {}): SpiderController {
           resident.velocity > 4,
           resident.silkInk,
           options.webOpacity,
+          prey.feeding(resident),
         );
         ctx.restore();
       });
+      if (prey.fly) {
+        ctx.save();
+        if (options.territory === 'root') {
+          ctx.beginPath();
+          ctx.rect(
+            territory.x - scroll.x,
+            territory.y - scroll.y,
+            territory.width,
+            territory.height,
+          );
+          ctx.clip();
+        }
+
+        ctx.translate(-scroll.x, -scroll.y);
+        prey.paint(ctx, clock, options.size * 0.78);
+        ctx.restore();
+      }
     }
   }
   function schedule(): void {
@@ -447,6 +503,7 @@ export function createSpider(input: SpiderOptions = {}): SpiderController {
   }
   function clearSilk(): void {
     silkCleared = true;
+    prey.releaseWeb();
     roamers.forEach((r) => {
       r.threads = [];
       r.tasks = [];
@@ -499,6 +556,7 @@ export function createSpider(input: SpiderOptions = {}): SpiderController {
   listen(media, 'change', () => {
     reduced = options.motion === 'none' || (options.motion === 'system' && media.matches);
     pointer = null;
+    if (reduced) prey.clear(clock, options.flyInterval);
     if (reduced)
       roamers.forEach((r) => {
         if (r.behavior === 'descending') {
@@ -559,6 +617,8 @@ export function createSpider(input: SpiderOptions = {}): SpiderController {
         'webDensity',
         'webSize',
         'color',
+        'flies',
+        'flyInterval',
       ];
       if (Object.keys(patch).some((key) => !allowed.includes(key)))
         throw new TypeError('Spider: update accepts appearance and behavior options only.');
@@ -566,7 +626,14 @@ export function createSpider(input: SpiderOptions = {}): SpiderController {
       if (next.color !== 'auto' && !CSS.supports('color', next.color))
         throw new TypeError('Spider: color must be a valid CSS color.');
       Object.assign(options, next);
+      if (!options.flies) prey.clear(clock, options.flyInterval);
       invalidate();
+    },
+    releaseFly() {
+      if (state !== 'destroyed' && options.roam && options.flies && !reduced) {
+        prey.request();
+        schedule();
+      }
     },
     clearWebs() {
       if (state !== 'destroyed') clearSilk();
@@ -596,6 +663,7 @@ export function createSpider(input: SpiderOptions = {}): SpiderController {
       frame = null;
       cleanup.forEach((fn) => fn());
       canvas.remove();
+      prey.clear(clock, options.flyInterval);
       surfaces = [];
       residents = [];
       observed = [];

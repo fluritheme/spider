@@ -1,4 +1,9 @@
 import { createSpider, type SpiderController } from '../src/index';
+declare global {
+  interface Window {
+    __fluriSpider?: SpiderController;
+  }
+}
 const get = <T extends HTMLElement>(id: string): T => document.getElementById(id) as T;
 const hero = get<HTMLElement>('playground');
 let spider: SpiderController,
@@ -18,8 +23,10 @@ function mount(): void {
     fearRadius: shy.checked ? 120 : 0,
     webOpacity: 0.68,
     webDensity: 0.85,
+    flies: get<HTMLInputElement>('flies').checked,
     zIndex: 50,
   });
+  window.__fluriSpider = spider;
   if (paused) spider.pause();
 }
 mount();
@@ -32,6 +39,19 @@ webSize.addEventListener('input', () => {
   spider.update({ webSize: Number(webSize.value) });
 });
 shy.addEventListener('change', () => spider.update({ fearRadius: shy.checked ? 120 : 0 }));
+get('flies').addEventListener('change', () =>
+  spider.update({ flies: get<HTMLInputElement>('flies').checked }),
+);
+get('send-fly').addEventListener('click', () => {
+  if (paused || spider.getState().reducedMotion) {
+    toast('Resume motion to invite a fly. Reduced-motion preferences stay respected.');
+    return;
+  }
+  get<HTMLInputElement>('flies').checked = true;
+  spider.update({ flies: true });
+  spider.releaseFly();
+  toast('A little visitor. Watch the spider hunt, catch, wrap and eat.');
+});
 get('clear-webs').addEventListener('click', () => spider.clearWebs());
 document.querySelectorAll<HTMLButtonElement>('[data-theme]').forEach((button) =>
   button.addEventListener('click', () => {
@@ -45,6 +65,7 @@ document.querySelectorAll<HTMLButtonElement>('[data-theme]').forEach((button) =>
 );
 function setPause(value: boolean): void {
   paused = value;
+  window.__fluriSpider = spider;
   if (paused) spider.pause();
   else spider.resume();
   get('pause').textContent = paused ? '▷ Resume resident' : 'Ⅱ Pause resident';
@@ -55,6 +76,7 @@ get('reset').addEventListener('click', () => {
   size.value = '1.6';
   webSize.value = '160';
   shy.checked = true;
+  get<HTMLInputElement>('flies').checked = true;
   get('size-value').textContent = '1.6×';
   get('web-value').textContent = '160px';
   hero.classList.remove('paper', 'dark');
@@ -72,9 +94,16 @@ const behaviors: Record<string, string> = {
   resting: 'TAKING A MOMENT',
   hiding: 'A LITTLE HIDE & SEEK',
   fleeing: 'A LITTLE TOO CLOSE',
+  hunting: 'HUNTING A LITTLE VISITOR',
+  eating: 'HAVING A LITTLE SNACK',
 };
 const statusTimer = setInterval(() => {
-  const resident = spider.getState().spiders[0];
+  const state = spider.getState();
+  const fly = state.flies[0];
+  get('fly-status').textContent = fly
+    ? `Fly: ${fly.state} · ${state.fliesEaten} eaten`
+    : `${state.fliesEaten} flies eaten · an occasional visitor`;
+  const resident = state.spiders[0];
   if (!resident) return;
   const status = paused ? 'TAKING A LITTLE NAP' : (behaviors[resident.behavior] ?? 'AT HOME');
   if (get('activity').textContent !== status) get('activity').textContent = status;
@@ -114,6 +143,14 @@ tabs.forEach((button, index) => {
   });
 });
 let toastTimer: ReturnType<typeof setTimeout>;
+function toast(message: string): void {
+  get('toast').textContent = message;
+  get('toast').hidden = false;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    get('toast').hidden = true;
+  }, 3500);
+}
 async function copy(text: string): Promise<void> {
   try {
     await navigator.clipboard.writeText(text);
@@ -137,6 +174,7 @@ get('copy-code').addEventListener('click', () => {
 });
 window.addEventListener('pagehide', () => {
   spider.destroy();
+  delete window.__fluriSpider;
   clearInterval(statusTimer);
   clearTimeout(toastTimer);
 });

@@ -1,6 +1,8 @@
 import type { SpiderOptions } from './types.js';
 export const defaults = {
   maxWebs: 6,
+  flies: true,
+  flyInterval: 35,
   spiders: 1,
   webSize: 112,
   size: 1,
@@ -27,6 +29,7 @@ export function resolveOptions(input: SpiderOptions): Options {
     spiders: [1, 8],
     webSize: [40, 240],
     size: [0.5, 2],
+    flyInterval: [8, 180],
     speed: [0.25, 3],
     fearRadius: [0, 300],
     webOpacity: [0, 1],
@@ -51,7 +54,7 @@ export function resolveOptions(input: SpiderOptions): Options {
     throw new TypeError('Spider: invalid territory.');
   if (typeof result.objects !== 'string')
     throw new TypeError('Spider: objects must be a selector.');
-  for (const key of ['weave', 'observe', 'roam'] as const)
+  for (const key of ['weave', 'observe', 'roam', 'flies'] as const)
     if (typeof result[key] !== 'boolean') throw new TypeError(`Spider: ${key} must be a boolean.`);
   return result;
 }

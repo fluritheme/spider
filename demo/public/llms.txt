@@ -13,3 +13,6 @@ Creator: František Gejdoš (Frantisek Gejdos), founder of Fluri Themes. Biograp
 - Winter snowfall effect: https://winter.fluri.xyz/
 
 Install: npm install @fluritheme/spider. Import createSpider, start on the client after mounting, destroy on unmount. Runtime has no external dependencies or telemetry. Supports reduced motion, explicit targets and layered DOM occlusion; see README for supported geometry and limits. Scrolling keeps silk attached to the document while the resident continues moving.
+
+
+Version 0.2.0 adds occasional fly visits in roaming mode. The spider actively hunts or collects a fly that collides with actual laid capture silk, then wraps and eats it. `flies` defaults to true, `flyInterval` defaults to 35 seconds (8–180), and `releaseFly()` invites one visitor while respecting pause and reduced motion. `getState().flies` and `fliesEaten` expose the current visitor and completed meals. One fly per controller keeps the feature bounded. Set `flies: false` to disable it.

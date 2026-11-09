@@ -28,8 +28,9 @@ let bytes = 0;
 for (const f of packed.files.filter((f) => f.path.endsWith('.js')))
   bytes += gzipSync(await readFile(new URL(`../${f.path}`, import.meta.url))).length;
 assert.ok(
-  bytes < 24000,
-  'Runtime gzip budget exceeded (24 kB across individually compressed modules)',
+  // 0.2 adds bounded prey physics, silk collision and fly/feeding artwork (~4 kB gzip).
+  bytes < 28000,
+  'Runtime gzip budget exceeded (28 kB across individually compressed modules)',
 );
 const { createSpider } = await import('../dist/index.js');
 const controller = createSpider();

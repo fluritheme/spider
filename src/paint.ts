@@ -49,6 +49,7 @@ export function paintSpider(
   walking = false,
   silkInk = silkWhite,
   silkOpacity = 0.4,
+  feeding = 0,
 ): void {
   if (anchor) {
     ctx.beginPath();
@@ -82,6 +83,12 @@ export function paintSpider(
       const root = { x: side * 7, y: -7 + leg * 4.2 };
       const knee = { x: side * (20 + Math.sin(leg * 1.1) * 3), y: -22 + leg * 12 + stride * 0.5 };
       const foot = { x: side * (31 - leg * 1.3 - step), y: -28 + leg * 18 + stride };
+      if (feeding && leg === 0 && !reduced) {
+        foot.x = side * (7 + Math.sin(time * 18 + side) * 1.5);
+        foot.y = -21 + Math.cos(time * 16) * 1.3;
+        knee.x = side * 17;
+        knee.y = -16;
+      }
       // Three rounded segments, with restrained sand-colored banding.
       ctx.strokeStyle = '#eedcc3';
       ctx.lineWidth = leg === 0 ? 4.2 : 3.8;
@@ -201,7 +208,15 @@ export function paintSpider(
     ctx.fill();
     ctx.fillStyle = '#e1c6a2';
     ctx.beginPath();
-    ctx.ellipse(side * 3.7, -17, 2.5, 3, side * 0.25, 0, Math.PI * 2);
+    ctx.ellipse(
+      side * (3.7 + feeding * Math.sin(time * 19) * 0.7),
+      -17,
+      2.5,
+      3,
+      side * 0.25,
+      0,
+      Math.PI * 2,
+    );
     ctx.fill();
   }
   ctx.restore();
