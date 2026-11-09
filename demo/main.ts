@@ -100,9 +100,10 @@ const behaviors: Record<string, string> = {
 const statusTimer = setInterval(() => {
   const state = spider.getState();
   const fly = state.flies[0];
-  get('fly-status').textContent = fly
+  const flyStatus = fly
     ? `Fly: ${fly.state} · ${state.fliesEaten} eaten`
     : `${state.fliesEaten} flies eaten · an occasional visitor`;
+  if (get('fly-status').textContent !== flyStatus) get('fly-status').textContent = flyStatus;
   const resident = state.spiders[0];
   if (!resident) return;
   const status = paused ? 'TAKING A LITTLE NAP' : (behaviors[resident.behavior] ?? 'AT HOME');
