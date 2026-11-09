@@ -5,3 +5,6 @@ site-dist
 playwright-report
 test-results
 pnpm-lock.yaml
+
+# Generated Framer demo, built and verified in its separate product workspace.
+demo/public/framer

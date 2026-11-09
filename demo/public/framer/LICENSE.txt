@@ -1,0 +1,1 @@
+Original Spider Framer demo and adapter: Copyright 2026 Frantisek Gejdos / Fluri Themes. All rights reserved. The free @fluritheme/spider engine is MIT. React notices: THIRD-PARTY.txt. Engine notice: runtime/THIRD-PARTY.txt.
