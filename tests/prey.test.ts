@@ -68,10 +68,10 @@ describe('occasional fly visits', () => {
     expect(t.laid).toBe(0.4);
   });
   it('traps a moving fly through the live update path only when it touches a laid capture strand', () => {
-    const r = makeResident({ x: 120, y: 170 }, 0),
+    const r = makeResident({ x: 200, y: 170 }, 0),
       t = strand();
     r.threads = [t];
-    const p = new Prey();
+    const p = new Prey(() => 0.5);
     p.fly = fly({ x: 200, y: 123, destination: { x: 200, y: 200 }, vy: 100 });
     p.update(0.05, 1, box, [r], 0.5, 35, 1, () => true);
     expect(p.fly?.state).toBe('trapped');
