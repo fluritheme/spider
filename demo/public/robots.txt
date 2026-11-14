@@ -2,4 +2,5 @@ User-agent: *
 Allow: /
 Disallow: /dashboard
 Disallow: /api/
+Disallow: /internal/
 Sitemap: https://spider.fluri.xyz/sitemap.xml

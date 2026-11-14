@@ -1,1 +1,140 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Spider for Framer — Setup</title><style>body{font:18px/1.65 system-ui,sans-serif;max-width:800px;margin:60px auto;padding:24px;background:#211711;color:#ffedcd}h1{font-size:clamp(40px,8vw,76px);line-height:1;letter-spacing:-.06em;color:#f97432}a{color:inherit}li{margin:20px 0}code{color:#f97432}</style></head><body><a href="./">← Live demo</a><h1>A new resident.<br>A few small steps.</h1><ol><li>Create a code component called Spider in Framer.</li><li>Paste the supplied <code>Spider.tsx</code>, save and place it on the page.</li><li>Choose Whole page, then open Preview. The orange editor marker becomes a resident descending on silk.</li><li>Tune size, speed and silk in the sidebar. Keep one instance visible at each breakpoint.</li></ol><h2>Give it a place to live.</h2><p>Buttons, cards, images and headings provide real geometry. Name a layer Web anchor or Hiding place for explicit control. Silk is built gradually by the resident.</p><h2>A considerate guest.</h2><p>Visitor controls can pause the effect or explicitly clear the silk. Clicking webs never erases them. Reduced-motion preferences are respected, and touch scrolling remains available.</p><p>Checkout is not open yet. <a href="https://spider.fluri.xyz/">The MIT JavaScript engine is available now ↗</a></p></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Spider for Framer — Setup</title>
+    <style>
+      body {
+        font:
+          18px/1.65 system-ui,
+          sans-serif;
+        max-width: 800px;
+        margin: 60px auto;
+        padding: 24px;
+        background: #211711;
+        color: #ffedcd;
+      }
+      h1 {
+        font-size: clamp(40px, 8vw, 76px);
+        line-height: 1;
+        letter-spacing: -0.06em;
+        color: #f97432;
+      }
+      a {
+        color: inherit;
+      }
+      li {
+        margin: 20px 0;
+      }
+      code {
+        color: #f97432;
+      }
+    </style>
+
+    <meta property="og:type" content="website" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://spider.fluri.xyz/#website",
+            "name": "Spider by Fluri",
+            "url": "https://spider.fluri.xyz/",
+            "keywords": [
+              "animated website spider",
+              "JavaScript spider animation",
+              "realistic spider webs",
+              "Halloween website effects",
+              "Framer spider component"
+            ]
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "TechArticle",
+            "@id": "https://spider.fluri.xyz/framer/guide.html#page",
+            "url": "https://spider.fluri.xyz/framer/guide.html",
+            "name": "Spider for Framer — Setup",
+            "description": "Set up Spider by Fluri in Framer. Add the component, tune the effect, and respect visitor motion preferences.",
+            "inLanguage": "en",
+            "isPartOf": { "@id": "https://spider.fluri.xyz/#website" },
+            "publisher": { "@id": "https://fluri.xyz/#organization" },
+            "about": { "@id": "https://spider.fluri.xyz/#software" }
+          },
+          {
+            "@type": "Person",
+            "@id": "https://fluri.xyz/#founder",
+            "name": "František Gejdoš",
+            "alternateName": "Frantisek Gejdos",
+            "url": "https://fluri.xyz/founder/",
+            "jobTitle": "Founder of Fluri Themes",
+            "worksFor": { "@id": "https://fluri.xyz/#organization" }
+          }
+        ]
+      }
+    </script>
+
+    <link rel="canonical" href="https://spider.fluri.xyz/framer/guide" />
+    <meta
+      name="description"
+      content="Set up Spider by Fluri in Framer. Add the component, tune the effect, and respect visitor motion preferences."
+    />
+    <meta
+      name="robots"
+      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    />
+    <meta name="author" content="František Gejdoš" />
+    <meta name="msvalidate.01" content="2DA9F1E4496B9F72E22C73EBF6FEA09A" />
+    <meta property="og:site_name" content="Spider by Fluri" />
+    <meta property="og:title" content="Spider for Framer — Setup" />
+    <meta
+      property="og:description"
+      content="Set up Spider by Fluri in Framer. Add the component, tune the effect, and respect visitor motion preferences."
+    />
+    <meta property="og:url" content="https://spider.fluri.xyz/framer/guide" />
+    <meta property="og:image" content="https://spider.fluri.xyz/social.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Spider by Fluri — interactive website effects by Fluri Themes"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Spider for Framer — Setup" />
+    <meta
+      name="twitter:description"
+      content="Set up Spider by Fluri in Framer. Add the component, tune the effect, and respect visitor motion preferences."
+    />
+    <meta name="twitter:image" content="https://spider.fluri.xyz/social.png" />
+  </head>
+  <body>
+    <a href="./">← Live demo</a>
+    <h1>A new resident.<br />A few small steps.</h1>
+    <ol>
+      <li>Create a code component called Spider in Framer.</li>
+      <li>Paste the supplied <code>Spider.tsx</code>, save and place it on the page.</li>
+      <li>
+        Choose Whole page, then open Preview. The orange editor marker becomes a resident descending
+        on silk.
+      </li>
+      <li>
+        Tune size, speed and silk in the sidebar. Keep one instance visible at each breakpoint.
+      </li>
+    </ol>
+    <h2>Give it a place to live.</h2>
+    <p>
+      Buttons, cards, images and headings provide real geometry. Name a layer Web anchor or Hiding
+      place for explicit control. Silk is built gradually by the resident.
+    </p>
+    <h2>A considerate guest.</h2>
+    <p>
+      Visitor controls can pause the effect or explicitly clear the silk. Clicking webs never erases
+      them. Reduced-motion preferences are respected, and touch scrolling remains available.
+    </p>
+    <p>
+      Checkout is not open yet.
+      <a href="https://spider.fluri.xyz/">The MIT JavaScript engine is available now ↗</a>
+    </p>
+  </body>
+</html>

@@ -164,6 +164,24 @@ export default {
     context: { waitUntil(promise: Promise<unknown>): void },
   ): Promise<Response> {
     const url = new URL(request.url);
+    if (url.pathname === '/dashboard' || url.pathname.startsWith('/dashboard/'))
+      return new Response(null, {
+        status: 308,
+        headers: {
+          Location: 'https://fluri.xyz/dashboard/',
+          'Cache-Control': 'no-store',
+          'X-Robots-Tag': 'noindex, nofollow',
+        },
+      });
+    if (url.hostname !== 'fluri.xyz' && url.pathname.startsWith('/api/dashboard'))
+      return Response.json(
+        { error: 'The dashboard has moved to https://fluri.xyz/dashboard/' },
+        {
+          status: 410,
+          headers: { 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex, nofollow' },
+        },
+      );
+
     if (url.origin !== origin) return new Response('Not found', { status: 404 });
     if (url.pathname === '/readme/npm-downloads.svg') return downloadsBadge(request);
     if (url.pathname.startsWith('/api/')) {

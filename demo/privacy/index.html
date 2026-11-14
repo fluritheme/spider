@@ -4,22 +4,95 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#181510" />
+
+    <title>Spider — privacy & measurement</title>
+
+    <link rel="icon" href="/spider.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/privacy.css" />
+
+    <meta property="og:type" content="website" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://spider.fluri.xyz/#website",
+            "name": "Spider by Fluri",
+            "url": "https://spider.fluri.xyz/",
+            "keywords": [
+              "animated website spider",
+              "JavaScript spider animation",
+              "realistic spider webs",
+              "Halloween website effects",
+              "Framer spider component"
+            ]
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            "@id": "https://spider.fluri.xyz/privacy/#page",
+            "url": "https://spider.fluri.xyz/privacy/",
+            "name": "Spider — privacy & measurement",
+            "description": "How Spider counts website traffic, and what the package never collects.",
+            "inLanguage": "en",
+            "isPartOf": { "@id": "https://spider.fluri.xyz/#website" },
+            "publisher": { "@id": "https://fluri.xyz/#organization" },
+            "about": { "@id": "https://spider.fluri.xyz/#software" }
+          },
+          {
+            "@type": "Person",
+            "@id": "https://fluri.xyz/#founder",
+            "name": "František Gejdoš",
+            "alternateName": "Frantisek Gejdos",
+            "url": "https://fluri.xyz/founder/",
+            "jobTitle": "Founder of Fluri Themes",
+            "worksFor": { "@id": "https://fluri.xyz/#organization" }
+          }
+        ]
+      }
+    </script>
+
+    <link rel="canonical" href="https://spider.fluri.xyz/privacy/" />
     <meta
       name="description"
       content="How Spider counts website traffic, and what the package never collects."
     />
-    <title>Spider — privacy & measurement</title>
-    <link rel="canonical" href="https://spider.fluri.xyz/privacy/" />
-    <link rel="icon" href="/spider.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="/dashboard.css" />
+    <meta
+      name="robots"
+      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    />
+    <meta name="author" content="František Gejdoš" />
+    <meta name="msvalidate.01" content="2DA9F1E4496B9F72E22C73EBF6FEA09A" />
+    <meta property="og:site_name" content="Spider by Fluri" />
+    <meta property="og:title" content="Spider — privacy &amp; measurement" />
+    <meta
+      property="og:description"
+      content="How Spider counts website traffic, and what the package never collects."
+    />
+    <meta property="og:url" content="https://spider.fluri.xyz/privacy/" />
+    <meta property="og:image" content="https://spider.fluri.xyz/social.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Spider by Fluri — interactive website effects by Fluri Themes"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Spider — privacy &amp; measurement" />
+    <meta
+      name="twitter:description"
+      content="How Spider counts website traffic, and what the package never collects."
+    />
+    <meta name="twitter:image" content="https://spider.fluri.xyz/social.png" />
   </head>
   <body>
-    <header class="dashboard-header">
+    <header class="site-header">
       <a class="brand" href="/">spider<span>BY FLURI</span></a
       ><a href="/">Back to the habitat ↗</a>
     </header>
     <main class="privacy-copy">
-      <span class="eyebrow">PRIVACY / UPDATED 8 NOVEMBER 2026</span>
+      <span class="eyebrow">PRIVACY / UPDATED 14 NOVEMBER 2026</span>
       <h1>A small<br /><em>footprint.</em></h1>
       <h2>The package</h2>
       <p>
@@ -31,7 +104,7 @@
       <p>
         We count successful public HTML page requests to understand interest in Spider and improve
         this site. Cloudflare Workers aggregates these into daily totals in a separate Cloudflare D1
-        database created with EU jurisdiction. Only the UTC date, a fixed public page path, a broad
+        database created with EU jurisdiction. Only the UTC date, a public page path, a broad
         referral category, count and update time are stored. Query strings, full referrer URLs, IP
         addresses, user agents and visitor identifiers are not stored in this analytics database.
       </p>
@@ -54,12 +127,13 @@
         Cloudflare rate limits; the daily hashed network address used for that limit is separate
         from analytics and is not stored in D1.
       </p>
-      <h2>npm & GitHub</h2>
+      <h2>One private traffic dashboard</h2>
       <p>
-        The private dashboard fetches official aggregate download statistics for @fluritheme/spider
-        from npm on the server. Downloads include CI and repeat installations. They are not website
-        visitors or npm page views. GitHub repository traffic is available through a link to
-        GitHub’s separate, collaborator-only report.
+        Aggregate traffic is viewed at
+        <a href="https://fluri.xyz/dashboard/">fluri.xyz/dashboard</a>, alongside the main site,
+        Winter and Grinch. It reports page views and broad referrer categories, without npm download
+        statistics. Earlier Spider traffic remains available. Public README badges can still show
+        package-download counts from npm; these do not identify website visitors.
       </p>
       <h2>Hosting & contact</h2>
       <p>

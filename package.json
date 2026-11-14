@@ -5,7 +5,7 @@
   "type": "module",
   "license": "MIT",
   "author": {
-    "name": "Franti\u0161ek Gejdo\u0161",
+    "name": "František Gejdoš",
     "url": "https://fluri.xyz/founder/",
     "email": "fluritheme@gmail.com"
   },
@@ -64,7 +64,7 @@
   "packageManager": "pnpm@10.33.2",
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
-    "build:site": "node scripts/prepare-discovery.mjs && vite build",
+    "build:site": "node scripts/prepare-discovery.mjs && node scripts/prepare-seo.mjs spider && vite build",
     "dev": "vite --host 127.0.0.1 --port 5198",
     "preview": "vite preview --host 127.0.0.1 --port 4198",
     "typecheck": "tsc --noEmit",

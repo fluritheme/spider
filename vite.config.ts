@@ -10,7 +10,6 @@ export default defineConfig({
     rolldownOptions: {
       input: {
         home: fileURLToPath(new URL('./demo/index.html', import.meta.url)),
-        dashboard: fileURLToPath(new URL('./demo/dashboard/index.html', import.meta.url)),
         privacy: fileURLToPath(new URL('./demo/privacy/index.html', import.meta.url)),
       },
     },
