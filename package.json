@@ -1,9 +1,9 @@
 {
   "name": "@fluritheme/spider",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "An expressive website spider that weaves DOM-aware silk, hunts occasional flies and wraps its catch. Original vector artwork, TypeScript, zero dependencies.",
   "type": "module",
-  "license": "MIT",
+  "license": "SEE LICENSE IN LICENSE",
   "author": {
     "name": "František Gejdoš",
     "url": "https://fluri.xyz/founder/",
@@ -44,7 +44,10 @@
     "dist",
     "README.md",
     "LICENSE",
-    "CHANGELOG.md"
+    "CHANGELOG.md",
+    "LICENSE-MIT-LEGACY",
+    "LICENSING.md",
+    "licensing.json"
   ],
   "exports": {
     ".": {
@@ -64,7 +67,7 @@
   "packageManager": "pnpm@10.33.2",
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
-    "build:site": "node scripts/prepare-discovery.mjs && node scripts/prepare-seo.mjs spider && vite build",
+    "build:site": "node scripts/prepare-licensing.mjs spider && node scripts/prepare-discovery.mjs && node scripts/prepare-seo.mjs spider && vite build",
     "dev": "vite --host 127.0.0.1 --port 5198",
     "preview": "vite preview --host 127.0.0.1 --port 4198",
     "typecheck": "tsc --noEmit",

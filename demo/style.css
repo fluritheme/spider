@@ -1161,3 +1161,13 @@ section[id] {
     scroll-behavior: auto;
   }
 }
+
+.install-top > .license-notice {
+  font-size: 13px;
+  line-height: 1.65;
+  max-width: 44ch;
+}
+.license-notice a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

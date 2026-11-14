@@ -1,3 +1,4 @@
+await import('./check-licensing.mjs');
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { readFile } from 'node:fs/promises';
@@ -21,7 +22,9 @@ for (const name of ['dist/index.js', 'dist/index.d.ts', 'README.md', 'LICENSE', 
   );
 assert.ok(
   packed.files.every((f) =>
-    /^(dist\/|README.md$|LICENSE$|CHANGELOG.md$|package.json$)/.test(f.path),
+    /^(dist\/|README.md$|LICENSE$|LICENSE-MIT-LEGACY$|LICENSING.md$|licensing.json$|CHANGELOG.md$|package.json$)/.test(
+      f.path,
+    ),
   ),
 );
 let bytes = 0;

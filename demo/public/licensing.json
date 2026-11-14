@@ -1,0 +1,33 @@
+{
+  "name": "Fluri Themes Commercial License",
+  "version": "1.0",
+  "effectiveDate": "2026-11-14",
+  "license": "SEE LICENSE IN LICENSE",
+  "url": "https://fluri.xyz/license/",
+  "price": {
+    "amount": 19,
+    "currency": "EUR",
+    "billing": "one-time"
+  },
+  "personalProjects": "unlimited",
+  "clientProjects": "unlimited",
+  "futureThemesIncluded": true,
+  "packages": {
+    "@fluritheme/fluri": {
+      "lastMIT": "0.2.1",
+      "firstCommercial": "0.3.0"
+    },
+    "@fluritheme/fluri-react": {
+      "lastMIT": "0.2.1",
+      "firstCommercial": "0.3.0"
+    },
+    "@fluritheme/spider": {
+      "lastMIT": "0.2.1",
+      "firstCommercial": "0.3.0"
+    },
+    "@fluritheme/grinch": {
+      "lastMIT": "0.1.1",
+      "firstCommercial": "0.2.0"
+    }
+  }
+}

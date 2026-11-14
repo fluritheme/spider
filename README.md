@@ -8,7 +8,7 @@
 
 [![npm version](https://spider.fluri.xyz/readme/npm-version.svg)](https://www.npmjs.com/package/@fluritheme/spider)
 [![npm downloads in the last 30 days](https://spider.fluri.xyz/readme/npm-downloads.svg)](https://www.npmjs.com/package/@fluritheme/spider)
-[![MIT license](https://img.shields.io/badge/license-MIT-39271d.svg)](https://github.com/fluritheme/spider/blob/main/LICENSE)
+[![Commercial licence](https://fluri.xyz/commercial-license.svg)](https://fluri.xyz/license/)
 [![Quality](https://github.com/fluritheme/spider/actions/workflows/ci.yml/badge.svg)](https://github.com/fluritheme/spider/actions/workflows/ci.yml)
 
 </div>
@@ -59,7 +59,9 @@ The actual package, captured live. Every strand is laid by the spider. Finished 
 
 </details>
 
-## Install
+## Licence and installation
+
+Current releases require the [EUR 19 lifetime licence](https://fluri.xyz/license/) before production deployment or client delivery. It covers all current and future Fluri themes on unlimited personal and client websites. Private non-production evaluation is permitted. Earlier MIT versions remain MIT; see [the version boundaries](https://fluri.xyz/licensing.md).
 
 ```sh
 npm install @fluritheme/spider
@@ -303,7 +305,7 @@ Install test browsers once with `pnpm exec playwright install --with-deps chromi
 
 ## License
 
-[MIT](https://github.com/fluritheme/spider/blob/main/LICENSE). Created by [František Gejdoš](https://fluri.xyz/founder/), founder of [Fluri Themes](https://fluri.xyz/). Original procedural character artwork is included under the same license. Self-hosted demo fonts retain their SIL Open Font Licenses in `demo/public/fonts/`.
+[Fluri Themes Commercial License 1.0](https://fluri.xyz/license/). Created by [František Gejdoš](https://fluri.xyz/founder/), founder of [Fluri Themes](https://fluri.xyz/). Original procedural character artwork is included under the same license. Self-hosted demo fonts retain their SIL Open Font Licenses in `demo/public/fonts/`.
 
 ## Package availability
 

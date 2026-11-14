@@ -1,21 +1,56 @@
-MIT License
+FLURI THEMES COMMERCIAL LICENSE 1.0
+Effective date: 14 November 2026
+Copyright (c) 2026 František Gejdoš. All rights reserved, except as granted below.
+Licensor: František Gejdoš, Slovakia, trading as Fluri Themes.
+Contact: fluritheme@gmail.com
+Canonical terms: https://fluri.xyz/license/
 
-Copyright (c) 2026 Fluri contributors
+1. Scope and acceptance
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+This license covers Fluri Themes software, original theme artwork and accompanying documentation supplied with this license (the Software). It applies to the new commercial releases identified in LICENSING.md, and to future Fluri Themes releases supplied under these terms. Downloading a package does not by itself grant a production-use license. Rights in previously released MIT versions are preserved under section 6.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+2. Evaluation before purchase
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+You may download, inspect, install and modify the Software solely for private, non-production evaluation on your own devices and access-restricted test environments. You may view and interact with Fluri's official public demonstrations. Evaluation does not permit production use, public deployment, client delivery, public source redistribution or commercial exploitation. A paid license is required for those production and client uses. Automated security analysis and package-registry processing are permitted.
+
+3. One purchase, lifetime access
+
+A valid purchase of the Fluri Themes Lifetime License grants the named buyer a non-exclusive, worldwide, perpetual license to use and modify all current and future Fluri Themes for unlimited personal, business and client websites and web applications. The listed one-time price is EUR 19; any legally required tax information and total payable must be provided before purchase. A receipt or written license confirmation from Fluri identifies the buyer and records the purchase. There are no recurring license fees and no per-project or per-domain charges.
+
+Lifetime means the right to continue using lawfully obtained themes does not expire while you comply with this license. The purchase also includes access to future Fluri themes and theme updates without another theme-license payment. You may retain your own backup copies. No particular release count, release date, support response time or perpetual operation of a hosting or download service is promised. Any mandatory obligations concerning updates, digital content and consumer remedies remain applicable.
+
+4. Personal and client projects
+
+The buyer may be an individual or a legal entity. Employees and contractors may work with the Software only on projects covered by that buyer's license and may not use shared access for their unrelated projects. The buyer remains responsible for providing access appropriately.
+
+You may bundle the Software, including reasonably necessary source code, into a completed website or application and charge clients for that completed project and your services. A client may operate, maintain and modify the delivered project without purchasing a separate Fluri license. That permission does not give the client a reusable theme-library license for unrelated projects. Ordinary browser delivery of compiled or bundled JavaScript, and project handover to the client or their maintainer, are permitted. Your finished project must provide substantial functionality or content beyond redistributing Fluri themes.
+
+5. Restrictions
+
+Except for the project delivery permitted in section 4, you may not sell, sublicense, give away, publicly redistribute or make the Software available as standalone themes, packages, downloadable source, a template pack, asset collection, theme marketplace or competing reusable library. You may not share purchase credentials or bulk-download access with unrelated buyers, or offer a service whose primary purpose is allowing others to extract, download or redistribute the themes. Private backups and private project repositories are allowed.
+
+You may customize themes for your own and client projects. You may not claim authorship of Fluri's unmodified original assets or imply endorsement by Fluri. Keep supplied copyright, license and third-party notices in source distributions and project handovers where applicable. No visible website credit or Fluri branding is required. Rights independently granted by a third party's license or a hosting platform's applicable terms are not restricted by this license.
+
+6. Existing MIT releases
+
+This license does not replace, revoke or restrict the MIT license attached to earlier published versions: @fluritheme/fluri through 0.2.1; @fluritheme/fluri-react through 0.2.1; @fluritheme/spider through 0.2.1; and @fluritheme/grinch through 0.1.1. Those releases and copies remain governed by their original MIT terms. The first commercial releases are Winter core and React adapter 0.3.0, Spider 0.3.0 and Grinch 0.2.0. New themes use this commercial license from their initial release unless Fluri expressly supplies another license. See LICENSE-MIT-LEGACY for the historical notice. This is not a choice of MIT or commercial licensing for the current commercial release.
+
+7. Third-party materials
+
+Dependencies, fonts, contributed material and other third-party components retain their own licenses and required notices. This license does not grant exclusive rights to third-party material or replace its terms. The Fluri name and brand are not licensed for use as your own brand. Your content and modifications remain yours, subject to the license obligations for any incorporated Fluri material.
+
+8. Operation and privacy
+
+The animation runtime does not require online license activation, insert an advertising watermark or send installation telemetry. You remain responsible for integrating it appropriately, preserving usable page controls and respecting visitor motion preferences. Compatibility and performance depend on the host website and device.
+
+9. Termination
+
+You may stop using the Software at any time. Fluri may terminate this license for a material breach that remains uncorrected for 30 days after written notice explaining the breach, where correction is possible. On termination you must stop creating new deployments and stop using or redistributing the affected Software, except to the extent mandatory law or independently granted rights provide otherwise. Termination does not revoke rights under the legacy MIT releases. A refund or reversed payment is handled under the applicable purchase terms and mandatory law; it does not silently alter third-party open-source rights.
+
+10. Warranty, liability and mandatory rights
+
+Except for express promises made at purchase and rights that cannot lawfully be excluded, the Software is supplied as is, without a promise of fitness for every website or uninterrupted operation. To the extent permitted by applicable law, Fluri is not liable for indirect or consequential losses arising from use of the Software. Nothing in this license excludes or limits liability, guarantees, withdrawal rights, digital-content remedies or other protections that cannot lawfully be excluded or limited, including applicable consumer rights. This license does not impose an automatic waiver of refund or withdrawal rights.
+
+11. Version of the agreement
+
+Keep this license with your purchase records. Later changes to Fluri's published license do not retroactively narrow rights already granted under this version. Any additional services or separately agreed support have their own clearly disclosed terms. Questions and license requests: fluritheme@gmail.com.

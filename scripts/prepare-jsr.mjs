@@ -1,3 +1,4 @@
+import assert from 'node:assert/strict';
 import { cp, mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -7,6 +8,11 @@ const packages = manifest.private ? ['packages/core', 'packages/react'] : ['.'];
 for (const relative of packages) {
   const source = join(root, relative);
   const pkg = JSON.parse(await readFile(join(source, 'package.json'), 'utf8'));
+  assert.equal(
+    pkg.license,
+    'MIT',
+    'Commercial editions are distributed through npm and Fluri. Existing JSR MIT releases are preserved.',
+  );
   const name = pkg.name.split('/')[1];
   const destination = join(root, '.wrangler', 'jsr', name);
   await mkdir(destination, { recursive: true });
