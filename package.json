@@ -1,6 +1,6 @@
 {
   "name": "@fluritheme/spider",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "An expressive website spider that weaves DOM-aware silk, hunts occasional flies and wraps its catch. Original vector artwork, TypeScript, zero dependencies.",
   "type": "module",
   "license": "MIT",
@@ -9,7 +9,7 @@
     "url": "https://fluri.xyz/founder/",
     "email": "fluritheme@gmail.com"
   },
-  "homepage": "https://spider.fluri.xyz/",
+  "homepage": "https://fluri.xyz/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/fluritheme/spider.git"

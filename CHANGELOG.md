@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.1 — 2026-11-14
+
+- Point the npm Homepage link to https://fluri.xyz/. The Spider playground and documentation remain at spider.fluri.xyz.
+- Keep the animation runtime unchanged.
+
 ## 0.2.0 — 2026-11-09
 
 - Add occasional animated flies, active pursuit, physical capture on laid silk, white-silk wrapping and a small feeding animation. One fly per instance keeps the behavior bounded.
